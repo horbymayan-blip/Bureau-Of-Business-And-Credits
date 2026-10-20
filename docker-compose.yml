@@ -1,0 +1,25 @@
+services:
+  bureau-portal:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    volumes:
+      # Persist SQLite + uploaded movies across restarts/redeploys
+      - bureau-data:/app/data
+      - bureau-movies:/app/public/assets/movies
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  bureau-data:
+  bureau-movies:

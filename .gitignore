@@ -1,0 +1,37 @@
+# Dependencies — NEVER commit these, reinstall with `npm ci` / `npm install`
+node_modules/
+npm-debug.log*
+
+# Secrets — NEVER commit real keys (your .env has live MoMo keys, keep it local only)
+.env
+.env.local
+.env.*.local
+.env.production
+# Allow examples so Render / teammates know what to set
+!.env.example
+!.env.production.example
+
+# SQLite live DB + journals — ephemeral, don't push; Render disk is ephemeral too
+data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+*.db-shm
+*.db-wal
+
+# Uploads + backups (large / private)
+backups/
+public/assets/movies/*
+!public/assets/movies/.gitkeep
+
+# OS / IDE / tooling
+.DS_Store
+Thumbs.db
+.vs/
+.vscode/*
+!.vscode/extensions.json
+.agent-cache/
+.continue/
+.git/
+

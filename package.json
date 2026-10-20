@@ -1,0 +1,26 @@
+{
+  "name": "bureau-portal",
+  "version": "1.0.0",
+  "description": "Bureau Portal - loans, jobs, WiFi, movies with MTN MoMo payments",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22 <27"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test --test-concurrency=1",
+    "backup": "node scripts/backup-database.js",
+    "audit": "npm audit --omit=dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "uuid": "^14.0.2"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2022",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "checkJs": false,
+    "resolveJsonModule": true,
+    "lib": ["es2022"]
+  },
+  "include": ["server.js", "database.js", "auth.js", "wifi-provider.js", "drive-provider.js", "payment-providers.js", "scripts/**/*.js"],
+  "exclude": ["node_modules", ".agent-cache", ".agent-cache/**", ".vs", ".continue", "data", "backups", "public", "types"]
+}

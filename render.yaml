@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: bureau-portal
+    runtime: node
+    plan: starter
+    buildCommand: npm ci --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.17.0
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: MOMO_BASE_URL
+        value: https://sandbox.momodeveloper.mtn.com
+      - key: MOMO_ENVIRONMENT
+        value: sandbox
+      - key: MOMO_CURRENCY
+        value: EUR
+      - key: MOMO_PRIMARY_KEY
+        sync: false
+      - key: MOMO_API_USER
+        sync: false
+      - key: MOMO_API_KEY
+        sync: false
+      - key: MOMO_CALLBACK_URL
+        sync: false
+      - key: MOMO_CALLBACK_SECRET
+        sync: false
+      - key: WIFI_PROVISIONING_MODE
+        value: mock
+      - key: NOTIFICATION_CHANNEL
+        value: log
+# WARNING: Render free filesystem is ephemeral — data/*.sqlite and uploads reset on redeploy.
+# For persistence: Render Dashboard > Service > Disks > add 1GB disk mounted at /opt/render/project/src/data
+# Or move to VPS+Docker (see DEPLOYMENT.md) for BureauMovies storage.

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a0505"/>
+      <stop offset=".55" stop-color="#0a0a0a"/>
+      <stop offset="1" stop-color="#141414"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff2a54"/>
+      <stop offset="1" stop-color="#e50914"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="url(#bg)"/>
+  <rect x="0" y="0" width="400" height="14" fill="url(#red)"/>
+  <rect x="0" y="586" width="400" height="14" fill="url(#red)"/>
+  <!-- projector beam -->
+  <polygon points="200,180 30,480 370,480" fill="#ffffff" opacity="0.06"/>
+  <circle cx="200" cy="180" r="52" fill="none" stroke="#e50914" stroke-width="6"/>
+  <circle cx="200" cy="180" r="30" fill="none" stroke="#f5eeda" stroke-width="3" opacity=".8"/>
+  <polygon points="192,160 222,180 192,200" fill="#f5eeda"/>
+  <text x="200" y="300" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="42" fill="#f5eeda" letter-spacing="2">BUREAU</text>
+  <text x="200" y="350" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="52" fill="#e50914" letter-spacing="3">MOVIES</text>
+  <rect x="90" y="380" width="220" height="3" fill="#e50914" opacity=".8"/>
+  <text x="200" y="415" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#bcbcbc" letter-spacing="1">SEE A GREAT FILM!</text>
+  <text x="200" y="545" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#8a8a8a">ENJOY THE MAGIC OF CINEMA</text>
+</svg>

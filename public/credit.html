@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bureau Credit &amp; Loans | BUREAU CREDIT</title><link rel="stylesheet" href="/bureau-theme.css"><script src="/bureau-theme.js" defer></script>
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-dark: #062a68;
+            --primary-soft: #eaf3ff;
+            --accent: #22c55e;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --bg: #030712;
+            --white: #ffffff;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --line: rgba(30, 58, 138, 0.4);
+            --shadow: 0 18px 38px rgba(3, 7, 18, 0.5);
+            --glass-bg: rgba(11, 19, 36, 0.78);
+            --glass-border: rgba(59, 130, 246, 0.3);
+            --cyber-glow: #00f2fe;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(1200px 600px at 75% -10%, rgba(59, 130, 246, 0.16), transparent 60%),
+                radial-gradient(900px 600px at 5% 110%, rgba(0, 242, 254, 0.10), transparent 60%),
+                linear-gradient(180deg, #030712 0%, #071122 55%, #0a1930 100%);
+            background-color: #030712;
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Faint holographic cyber-grid across page */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(180deg, black 0%, rgba(0,0,0,0.45) 70%, transparent 100%);
+            -webkit-mask-image: linear-gradient(180deg, black 0%, rgba(0,0,0,0.45) 70%, transparent 100%);
+        }
+
+        body > * { position: relative; z-index: 1; }
+
+        /* Shared holographic title shimmer */
+        .holo-title {
+            background: linear-gradient(100deg, #fff 10%, #a5f3fc 28%, #c4b5fd 45%, #ff7cf5 62%, #a5f3fc 78%, #fff 95%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-text-flow 6s linear infinite;
+            filter: drop-shadow(0 3px 18px rgba(0, 242, 254, 0.32));
+        }
+        @keyframes holo-text-flow { 0% { background-position: 0% center; } 100% { background-position: 220% center; } }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 28px));
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(4, 13, 33, 0.92), rgba(11, 31, 68, 0.96));
+            color: var(--white);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            padding: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-text strong {
+            font-size: 1rem;
+            letter-spacing: 0.03em;
+        }
+
+        .brand-text span {
+            font-size: 0.76rem;
+            opacity: 0.8;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .nav a.primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 18px;
+        }
+
+        .menu-btn {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .button {
+            display: inline-block;
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 28px;
+            font-weight: 700;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: transform 0.16s ease, box-shadow 0.16s ease;
+        }
+
+        .button.primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(59, 130, 246, 0.35);
+        }
+
+        .button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(59, 130, 246, 0.45);
+        }
+
+        .button.secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--white);
+            border: 1px solid var(--glass-border);
+            padding: 14px 28px;
+        }
+
+        .button.secondary:hover {
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .hero {
+            position: relative;
+            isolation: isolate;
+            padding: 84px 0 68px;
+            /* Busy Kampala market scene — Owino / Nakasero rush-hour vibe + holographic grade */
+            background:
+                linear-gradient(90deg, rgba(3,7,18,0.94) 0%, rgba(4,12,28,0.82) 38%, rgba(4,12,28,0.48) 62%, rgba(10,25,47,0.62) 100%),
+                radial-gradient(ellipse 55% 60% at 12% 20%, rgba(0,242,254,0.18), transparent 65%),
+                radial-gradient(ellipse 50% 55% at 88% 12%, rgba(139,92,246,0.20), transparent 65%),
+                linear-gradient(115deg, rgba(0,242,254,0.12), rgba(139,92,246,0.12) 55%, rgba(255,124,245,0.08)),
+                url('https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1600&q=80') no-repeat center 38% / cover,
+                linear-gradient(180deg, #030712, #0a1930);
+            background-color: #030712;
+            border-bottom: 1px solid var(--glass-border);
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(0,242,254,0.18), inset 0 -28px 60px rgba(3,7,18,0.55);
+        }
+
+        /* Blueprint grid + scanline sheen over market photo */
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(0,242,254,0.09) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,242,254,0.09) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: radial-gradient(ellipse 78% 88% at 50% 32%, black 30%, transparent 78%);
+            -webkit-mask-image: radial-gradient(ellipse 78% 88% at 50% 32%, black 30%, transparent 78%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 4px);
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        .hero>.container {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            color: #38bdf8;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            line-height: 1.05;
+            font-weight: 800;
+            margin: 0 0 14px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #a5f3fc;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid var(--glass-border);
+            padding: 6px 12px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+        }
+
+        .hero-kicker .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+            animation: kicker-pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes kicker-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.35); opacity: 0.65; }
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 1.05rem;
+            max-width: 560px;
+            line-height: 1.6;
+            margin-bottom: 26px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            padding: 36px 0 8px;
+        }
+
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 20px;
+        }
+
+        .metric-icon {
+            font-size: 1.5rem;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-val {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--white);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--white);
+            margin: 48px 0 24px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(11, 19, 36, 0.92), rgba(4, 13, 33, 0.95));
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 26px rgba(0, 242, 254, 0.06);
+            transition: transform 0.16s ease, box-shadow 0.16s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 38px rgba(0, 242, 254, 0.14);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .card-content {
+            padding: 18px;
+        }
+
+        .card-num {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #38bdf8;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 6px 0 8px;
+            color: var(--white);
+        }
+
+        .card-desc {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .card-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        footer {
+            padding: 32px 0 40px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.92rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container topbar">
+            <div class="brand">
+                <img src="/assets/Bureau%20logo.png" alt="Bureau logo" class="brand-logo">
+                <div class="brand-text">
+                    <strong>Bureau of Business &amp; Credit</strong>
+                    <span>Micro-Finance Enterprise Hub</span>
+                </div>
+            </div>
+            <nav class="nav" aria-label="Main navigation">
+                <a href="/index.html">HOME</a>
+                <a href="/movies">BUREAU MOVIES</a>
+                <a href="/jobs.html">GET JOBS</a>
+                <a class="primary" href="/wifi.html">GET WIFI</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div>
+                <div class="eyebrow">Bureau of Business &amp; Credit</div>
+                <h1>Bureau Credit &amp; Loans</h1>
+                <p>Fast, transparent micro-loans and credit lines for your business and personal goals. Approved
+                    instantly and funded in minutes — no collateral, no hassle.</p>
+                <div class="hero-actions">
+                    <a href="/loan-apply.html" class="button primary">Get a Loan</a>
+                    <a href="/loan-apply.html#track" class="button secondary">Track my loan</a>
+                </div>
+            </div>
+            <div class="card" style="padding: 18px;">
+                <div class="card-content">
+                    <div class="card-num">FUTURE-READY FUNDS</div>
+                    <h3 class="card-title">Credit Lines for a Digital Economy</h3>
+                    <p class="card-desc">Instant line-of-credit access powered by Bureau's future-proof lending engine —
+                        ready whenever you are.</p>
+                    <a href="/loan-apply.html" class="card-link">Get a Loan →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="metrics-bar">
+        <div class="metric-item">
+            <div class="metric-icon">⚡</div>
+            <div>
+                <div class="metric-label">Rapid Disbursement</div>
+                <div class="metric-val">15-MINUTE MOBILE DISBURSEMENT</div>
+            </div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-icon">🧠</div>
+            <div>
+                <div class="metric-label">Credit System</div>
+                <div class="metric-val">ACCION &amp; GRAMEEN TRUST SCORING</div>
+            </div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-icon">🔓</div>
+            <div>
+                <div class="metric-label">Collateral</div>
+                <div class="metric-val">NO COLLATERAL REQUIRED</div>
+            </div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-icon">📲</div>
+            <div>
+                <div class="metric-label">Access</div>
+                <div class="metric-val">24/7 MOBILE PORTAL</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Micro-Lending Suite</h2>
+    <div class="card-grid">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&w=600&q=80"
+                alt="Nakasero Market Stall" class="card-img">
+            <div class="card-content">
+                <div class="card-num">01 / LIQUIDITY</div>
+                <h3 class="card-title">Rush-Hour Inventory Loan</h3>
+                <p class="card-desc">Short-term micro-advances designed for high-foot-traffic stall owners stocking bulk
+                    produce before morning peak hours.</p>
+                <a href="/loan-apply.html" class="card-link">Get a Loan +</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1556742049-0a670f4a4591?auto=format&fit=crop&w=600&q=80"
+                alt="Point of Sale Technology" class="card-img">
+            <div class="card-content">
+                <div class="card-num">02 / INFRASTRUCTURE</div>
+                <h3 class="card-title">Vendor Digital POS Micro-Credit</h3>
+                <p class="card-desc">Finance smart POS terminals and digital payment collection gear with zero upfront
+                    hardware costs.</p>
+                <a href="/loan-apply.html" class="card-link">Get a Loan +</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=600&q=80"
+                alt="Peer Lending Group" class="card-img">
+            <div class="card-content">
+                <div class="card-num">03 / SOLIDARITY</div>
+                <h3 class="card-title">Peer Group Micro-Trust Loans</h3>
+                <p class="card-desc">Leverage Western group-lending models (Grameen System) for market trader
+                    associations without traditional collateral requirements.</p>
+                <a href="/loan-apply.html" class="card-link">Get a Loan +</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>© 2026 Bureau of Business and Credit. Nakasero Enterprise Hub.</div>
+        <div>Kampala, Uganda</div>
+    </footer>
+
+</body>
+
+</html>

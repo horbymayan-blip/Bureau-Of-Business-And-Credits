@@ -1,0 +1,96 @@
+/* Bureau Portal — cinematic black & red touch shared across pages.
+   Inspired by BureauMovies tiles: deep black, signal red, warm cream text.
+   Include AFTER page styles to layer the movie feel while keeping original layout. */
+:root {
+  --bm-bg: #141414;
+  --bm-card: #181818;
+  --bm-raise: #232323;
+  --bm-red: #e50914;
+  --bm-red-2: #ff2a54;
+  --bm-cream: #f5eeda;
+  --bm-muted: #bcbcbc;
+  --bm-line: rgba(255,255,255,.12);
+}
+
+/* Cinematic top bar edge — original header colors untouched, only the red line added */
+.bm-cine-bar {
+  border-bottom: 2px solid var(--bm-red) !important;
+}
+
+/* Movie-tile cards for any page: black tile, red edge on hover, cream title */
+.bm-tile, .movie-col, .bm-card {
+  background: #151a23 !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+}
+.bm-tile:hover, .movie-col:hover, .bm-card:hover {
+  transform: translateY(-2px) scale(1.015) !important;
+  border-color: rgba(229,9,20,.65) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.55), 0 0 0 1px rgba(229,9,20,.35) !important;
+}
+
+.poster-frame {
+  position: relative !important;
+  aspect-ratio: 2/3 !important;
+  background: #000 url('/assets/movie-poster-fallback.svg') center/cover no-repeat !important;
+  overflow: hidden !important;
+}
+.poster-frame img, .poster-frame video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000 !important;
+}
+
+.badge {
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .6px !important;
+  text-transform: uppercase !important;
+  background: rgba(0,0,0,.72) !important;
+  color: #fff !important;
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+}
+.badge.premium {
+  background: linear-gradient(135deg,#ff2a54,#ff5e3a) !important;
+  border-color: transparent !important;
+}
+
+/* Buttons — keep shape, give BureauMovies red */
+.bm-btn, .go, button.bm-red {
+  background: var(--bm-red) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  font-weight: 800 !important;
+}
+.bm-btn.ghost {
+  background: rgba(255,255,255,.16) !important;
+}
+
+/* Inputs on dark movie tiles */
+.poster-frame input, .movie-col input, .bm-card input, .bm-tile input {
+  background: #0f0f0f !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+
+/* Section titles like rails */
+.rail-title {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  letter-spacing: .2px !important;
+  color: #fff !important;
+  border-left: 4px solid var(--bm-red) !important;
+  padding-left: 10px !important;
+}
+

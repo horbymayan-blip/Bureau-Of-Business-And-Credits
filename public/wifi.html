@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#030712">
+    <title>Bureau Wi-Fi Portal</title><link rel="stylesheet" href="/bureau-theme.css"><script src="/bureau-theme.js" defer></script>
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-dark: #062a68;
+            --primary-soft: #eaf3ff;
+            --accent: #22c55e;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --bg: #030712;
+            --white: #ffffff;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --line: rgba(30, 58, 138, 0.4);
+            --shadow: 0 18px 38px rgba(3, 7, 18, 0.5);
+            /* Holographic + Refined Cosmic Glassmorphism */
+            --glass-bg: rgba(11, 19, 36, 0.85);
+            --glass-border: rgba(0, 242, 254, 0.25);
+            --cyber-glow: #00f2fe;
+            --space-violet: #8b5cf6;
+            /* Holographic foil palette */
+            --holo-1: #00f2fe;
+            --holo-2: #7dd3fc;
+            --holo-3: #a78bfa;
+            --holo-4: #ff7cf5;
+            --holo-5: #4ade80;
+            --holo-gradient: linear-gradient(115deg, #00f2fe, #7dd3fc 20%, #a78bfa 40%, #ff7cf5 60%, #00f2fe 80%, #4ade80 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        body {
+            /* Cosmic deep space background with radial starfield gradient */
+            background:
+                radial-gradient(circle at 20% 10%, rgba(0, 242, 254, 0.08), transparent 40%),
+                radial-gradient(circle at 80% 60%, rgba(139, 92, 246, 0.08), transparent 40%),
+                linear-gradient(135deg, rgba(3, 7, 18, 0.94), rgba(10, 25, 47, 0.96)),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 28px));
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(4, 13, 33, 0.92), rgba(11, 31, 68, 0.96));
+            color: var(--white);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 0;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            padding: 10px 14px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+        }
+
+        .brand-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            object-fit: cover;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            padding: 6px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-text strong {
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            background: linear-gradient(90deg, #ffffff, var(--cyber-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text span {
+            font-size: 0.76rem;
+            color: var(--muted);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--cyber-glow);
+        }
+
+        .nav a.primary {
+            background: linear-gradient(135deg, #1d4ed8, #00f2fe);
+            color: var(--white);
+            border-radius: 999px;
+            padding: 10px 16px;
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.3);
+            border: 1px solid rgba(0, 242, 254, 0.4);
+        }
+
+        /* GLOBE SPACE + SATELLITE DISHES HERO BACKGROUND */
+        .hero {
+            padding: 64px 0 48px;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background:
+                linear-gradient(180deg, rgba(3, 7, 18, 0.62) 0%, rgba(3, 7, 18, 0.38) 38%, rgba(10, 25, 47, 0.88) 100%),
+                url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1920&auto=format&fit=crop') no-repeat 78% 18% / 560px auto,
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop') no-repeat center center / cover;
+            background-color: #030712;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        /* holographic aurora veil sweeping over hero */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: -20%;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 60% 45% at 15% 10%, rgba(0, 242, 254, 0.22), transparent 65%),
+                radial-gradient(ellipse 55% 50% at 85% 15%, rgba(255, 124, 245, 0.18), transparent 65%),
+                radial-gradient(ellipse 70% 55% at 50% 110%, rgba(139, 92, 246, 0.25), transparent 65%),
+                conic-gradient(from 180deg at 50% 50%, rgba(0, 242, 254, 0.08), rgba(167, 139, 250, 0.1), rgba(255, 124, 245, 0.08), rgba(0, 242, 254, 0.08));
+            filter: blur(1px);
+            animation: holo-drift 14s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        /* satellite signal beams + scanlines */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 4px),
+                linear-gradient(115deg, transparent 42%, rgba(0, 242, 254, 0.14) 48%, rgba(255, 124, 245, 0.14) 52%, transparent 58%);
+            background-size: auto, 250% 250%;
+            animation: holo-sheen 7s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes holo-drift {
+            0% {
+                transform: translate3d(-2%, -1%, 0) scale(1);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translate3d(2%, 2%, 0) scale(1.06);
+                opacity: 1;
+            }
+        }
+
+        @keyframes holo-sheen {
+            0% {
+                background-position: 0 0, 0% 20%;
+            }
+
+            50% {
+                background-position: 0 0, 100% 80%;
+            }
+
+            100% {
+                background-position: 0 0, 0% 20%;
+            }
+        }
+
+        /* twinkling starfield + orbiting satellite dishes silhouette strip */
+        .hero-stars,
+        .hero-dishes {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-stars {
+            background-image:
+                radial-gradient(1.6px 1.6px at 12% 22%, #fff, transparent),
+                radial-gradient(1.2px 1.2px at 28% 12%, #fff, transparent),
+                radial-gradient(1.8px 1.8px at 44% 28%, #a5f3fc, transparent),
+                radial-gradient(1.3px 1.3px at 62% 18%, #fff, transparent),
+                radial-gradient(1.5px 1.5px at 78% 32%, #f0abfc, transparent),
+                radial-gradient(1.1px 1.1px at 88% 14%, #fff, transparent),
+                radial-gradient(1.4px 1.4px at 18% 48%, #fff, transparent),
+                radial-gradient(1.2px 1.2px at 92% 58%, #bae6fd, transparent);
+            opacity: 0.9;
+            animation: twinkle 3.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.55;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .hero-dishes {
+            background:
+                linear-gradient(180deg, transparent 62%, rgba(3, 7, 18, 0.55) 100%),
+                url('https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?q=80&w=1920&auto=format&fit=crop') no-repeat 50% 108% / min(1100px, 110%) auto;
+            opacity: 0.5;
+            mask-image: linear-gradient(180deg, transparent 45%, black 78%);
+            -webkit-mask-image: linear-gradient(180deg, transparent 45%, black 78%);
+        }
+
+        /* ============ HOLOGRAPHIC TOUCH SYSTEM ============ */
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+        }
+
+        .holo-title {
+            background: linear-gradient(100deg, #fff 10%, #a5f3fc 28%, #c4b5fd 45%, #ff7cf5 62%, #a5f3fc 78%, #fff 95%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            filter: drop-shadow(0 4px 18px rgba(0, 242, 254, 0.35)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+            animation: holo-text-flow 6s linear infinite;
+        }
+
+        @keyframes holo-text-flow {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 220% center;
+            }
+        }
+
+        .holo-eyebrow {
+            background: linear-gradient(115deg, rgba(0, 242, 254, 0.22), rgba(167, 139, 250, 0.22), rgba(255, 124, 245, 0.22));
+            background-size: 200% 200%;
+            animation: holo-bg-pan 5s ease infinite;
+        }
+
+        @keyframes holo-bg-pan {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .holo-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .holo-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(115deg, transparent 30%, rgba(0, 242, 254, 0.18) 45%, rgba(255, 124, 245, 0.18) 52%, transparent 65%);
+            background-size: 250% 250%;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .holo-card:hover::after {
+            opacity: 1;
+            animation: holo-sheen 1.6s linear infinite;
+        }
+
+        .holo-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.5px;
+            background: var(--holo-gradient);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            animation: holo-bg-pan 4s linear infinite;
+        }
+
+        .holo-card:hover::before,
+        .package.selected.holo-card::before {
+            opacity: 1;
+        }
+
+        .holo-price strong {
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-text-flow 4s linear infinite;
+            text-shadow: none !important;
+            filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.35));
+        }
+
+        .holo-btn {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .holo-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -80%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.55), rgba(0, 242, 254, 0.4), transparent);
+            transform: skewX(-20deg);
+            animation: holo-btn-shine 3.2s ease-in-out infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes holo-btn-shine {
+            0% {
+                left: -80%;
+            }
+
+            55%,
+            100% {
+                left: 130%;
+            }
+        }
+
+        .holo-orbit {
+            position: absolute;
+            right: 6%;
+            top: 8%;
+            width: 220px;
+            height: 220px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+
+        .holo-orbit span {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 242, 254, 0.45);
+            animation: orbit-spin 18s linear infinite;
+        }
+
+        .holo-orbit span:nth-child(2) {
+            inset: 22px;
+            border-color: rgba(255, 124, 245, 0.4);
+            animation-duration: 12s;
+            animation-direction: reverse;
+        }
+
+        .holo-orbit span:nth-child(3) {
+            inset: 44px;
+            border-color: rgba(167, 139, 250, 0.5);
+            animation-duration: 9s;
+        }
+
+        .holo-orbit i {
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff, #00f2fe 60%, transparent 70%);
+            box-shadow: 0 0 14px #00f2fe, 0 0 30px rgba(255, 124, 245, 0.6);
+        }
+
+        @keyframes orbit-spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .hero::before,
+            .hero::after,
+            .hero-stars,
+            .holo-title,
+            .holo-eyebrow,
+            .holo-btn::after,
+            .holo-orbit span,
+            .holo-price strong {
+                animation: none !important;
+            }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid var(--glass-border);
+            color: var(--cyber-glow);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+            backdrop-filter: blur(8px);
+        }
+
+        .hero h1 {
+            margin: 0 0 14px;
+            font-size: clamp(2.3rem, 4vw, 4rem);
+            line-height: 1.08;
+            color: var(--white);
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .hero p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 1.08rem;
+            line-height: 1.7;
+            max-width: 600px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-actions {
+            margin-top: 26px;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 14px 22px;
+            font-weight: 800;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button.primary {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: var(--white);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .button.secondary {
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid var(--glass-border);
+            color: #93c5fd;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-panel {
+            background: rgba(11, 19, 36, 0.88);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+            padding: 22px;
+            backdrop-filter: blur(14px);
+        }
+
+        .hero-panel h3 {
+            margin: 0 0 12px;
+            font-size: 1.7rem;
+            color: var(--white);
+        }
+
+        .hero-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .hero-panel li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .hero-panel li::before {
+            content: "✓";
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(0, 242, 254, 0.18);
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            display: inline-grid;
+            place-items: center;
+            color: var(--cyber-glow);
+            font-weight: 900;
+        }
+
+        .main {
+            padding: 32px 0 44px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .intro h2 {
+            margin: 0 0 10px;
+            color: var(--white);
+            font-size: clamp(2rem, 3vw, 2.8rem);
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 22px auto 26px;
+            max-width: 620px;
+        }
+
+        .step {
+            min-width: 120px;
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px solid var(--glass-border);
+            color: #93c5fd;
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #1d4ed8, var(--cyber-glow));
+            color: var(--white);
+            border-color: transparent;
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.4);
+        }
+
+        .intro p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.02rem;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 12px 0 32px;
+        }
+
+        .photo-card {
+            position: relative;
+            height: 220px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .photo-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(5, 11, 24, 0.2) 0%, rgba(5, 11, 24, 0.92) 100%);
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+        }
+
+        .photo-card-content {
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .packages,
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .package,
+        .job-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 22px 18px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+            position: relative;
+            backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+        }
+
+        .package:hover,
+        .job-card:hover {
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .package.selected {
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+            background: linear-gradient(180deg, rgba(11, 19, 36, 0.95), rgba(0, 242, 254, 0.12));
+        }
+
+        .package.popular {
+            border: 2px solid rgba(0, 242, 254, 0.5);
+        }
+
+        .badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: linear-gradient(135deg, #1d4ed8, var(--cyber-glow));
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-radius: 999px;
+            padding: 7px 10px;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .package h3,
+        .job-card h3 {
+            margin: 0 0 8px;
+            color: var(--white);
+            font-size: 1.45rem;
+        }
+
+        .package p,
+        .job-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 0.94rem;
+        }
+
+        .price {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .price strong {
+            font-size: 1.8rem;
+            color: var(--cyber-glow);
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .price small {
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .package-features,
+        .job-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .package-features li,
+        .job-features li {
+            color: var(--text);
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .package-features li::before,
+        .job-features li::before {
+            content: "•";
+            color: var(--cyber-glow);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .buy-button,
+        .pay-button,
+        .movie-button,
+        .job-action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 12px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .buy-button,
+        .pay-button,
+        .job-action-button {
+            width: 100%;
+            background: linear-gradient(135deg, #1d4ed8, #0284c7);
+        }
+
+        .buy-button,
+        .job-action-button {
+            padding: 12px 16px;
+        }
+
+        .pay-button {
+            padding: 16px;
+            font-size: 1.05rem;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .movie-button {
+            width: 100%;
+            background: linear-gradient(135deg, #1d4ed8, var(--space-violet));
+            padding: 12px 16px;
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .buy-button:hover,
+        .pay-button:hover,
+        .movie-button:hover,
+        .job-action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+
+        .features {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 18px;
+        }
+
+        .more-products-title {
+            margin: 26px 0 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            color: var(--white);
+        }
+
+        .more-products-sub {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .feature-card .feature-action {
+            margin-top: 14px;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 22px 18px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+            transition: border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--cyber-glow);
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 14px;
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--cyber-glow);
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 8px;
+            color: var(--white);
+            font-size: 1.15rem;
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.92rem;
+        }
+
+        .cyber-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 6, 23, 0.88);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+
+        .cyber-modal-content {
+            background: linear-gradient(135deg, rgba(11, 19, 36, 0.96), rgba(4, 13, 33, 0.96));
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.25);
+            border-radius: 22px;
+            width: 100%;
+            max-width: 500px;
+            padding: 28px;
+            position: relative;
+            animation: modalPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalPopIn {
+            0% {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .cyber-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .cyber-modal-close:hover {
+            color: #fff;
+        }
+
+        .cyber-modal-title {
+            color: var(--cyber-glow);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .selection-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .selection-summary strong {
+            color: var(--cyber-glow);
+        }
+
+        .status-message {
+            display: none;
+            margin: 0 0 18px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .status-message.info {
+            display: block;
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--cyber-glow);
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #f87171;
+        }
+
+        .voucher-card {
+            display: none;
+            margin-top: 18px;
+            padding: 18px;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #4ade80;
+        }
+
+        .voucher-card h3 {
+            margin: 0 0 8px;
+            color: #fff;
+        }
+
+        .voucher-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .voucher-value {
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            font-weight: 700;
+            word-break: break-word;
+            color: #fff;
+        }
+
+        .voucher-label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.78rem;
+            color: #4ade80;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        label {
+            display: block;
+            font-weight: 800;
+            color: #93c5fd;
+            margin-bottom: 10px;
+        }
+
+        .field-note {
+            display: block;
+            margin-top: -8px;
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-size: 0.83rem;
+            line-height: 1.5;
+        }
+
+        #phoneNumber {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(3, 7, 18, 0.6);
+            color: var(--white);
+            font-size: 1.05rem;
+            margin-bottom: 18px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        #phoneNumber:focus {
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 22px;
+            font-weight: 800;
+            color: var(--cyber-glow);
+            cursor: pointer;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        .helper-strip {
+            margin-top: 24px;
+            padding: 18px 20px;
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            color: var(--text);
+            font-size: 0.92rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .payment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--glass-border);
+            color: var(--cyber-glow);
+            border-radius: 999px;
+            padding: 7px 13px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .intro h2.holo-title {
+            font-size: clamp(2rem, 3vw, 2.8rem);
+        }
+
+        .photo-card.holo-card {
+            border-width: 1px;
+        }
+
+        .voucher-card.holo-card::before {
+            opacity: 0.9;
+        }
+
+        .pay-button.holo-btn {
+            background: linear-gradient(115deg, #16a34a, #00c6ff 50%, #a78bfa 85%);
+            background-size: 200% 200%;
+            animation: holo-bg-pan 6s ease infinite;
+        }
+
+        footer {
+            padding: 28px 0 40px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.92rem;
+            border-top: 1px solid rgba(0, 242, 254, 0.1);
+        }
+
+        @media (max-width: 860px) {
+
+            .hero-grid,
+            .features,
+            .packages,
+            .jobs-grid,
+            .photo-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .holo-orbit {
+                width: 140px;
+                height: 140px;
+                right: 2%;
+                top: 4%;
+                opacity: 0.5;
+            }
+
+            .hero {
+                padding: 44px 0 34px;
+            }
+        }
+
+        /* ===== Android phones: clean single-column presentation, same layout ===== */
+        @media (max-width: 620px) {
+
+            body {
+                background-attachment: scroll;
+                overflow-x: hidden;
+            }
+
+            .container {
+                width: min(1100px, calc(100% - 20px));
+            }
+
+            .hero-grid,
+            .features,
+            .packages,
+            .jobs-grid,
+            .photo-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .topbar {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 12px;
+                padding: 14px 0;
+            }
+
+            .brand {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .nav {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .nav a {
+                text-align: center;
+                font-size: 0.82rem;
+                padding: 11px 8px;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+            }
+
+            .hero {
+                padding: 34px 0 26px;
+            }
+
+            .hero::before,
+            .hero::after,
+            .holo-orbit,
+            .hero-dishes {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: clamp(1.65rem, 7.2vw, 2.1rem);
+                line-height: 1.15;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .hero-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .button {
+                width: 100%;
+                min-height: 50px;
+                font-size: 0.95rem;
+            }
+
+            .hero-panel {
+                padding: 18px 16px;
+            }
+
+            .hero-panel h3 {
+                font-size: 1.25rem;
+            }
+
+            .photo-card {
+                height: 150px;
+            }
+
+            .intro h2 {
+                font-size: 1.5rem;
+            }
+
+            .intro p {
+                font-size: 0.92rem;
+            }
+
+            .stepper {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .step {
+                width: 100%;
+                text-align: left;
+                font-size: 0.88rem;
+                padding: 11px 14px;
+            }
+
+            .package,
+            .feature,
+            .feature-card {
+                padding: 18px 16px;
+            }
+
+            .package h3,
+            .feature h3,
+            .feature-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .price strong {
+                font-size: 1.5rem;
+            }
+
+            .buy-button,
+            .pay-button,
+            .movie-button,
+            .job-action-button {
+                width: 100%;
+                min-height: 50px;
+                font-size: 1rem;
+            }
+
+            .main {
+                padding: 22px 0 30px;
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px !important;
+                min-height: 50px;
+            }
+
+            .cyber-modal-content {
+                width: calc(100% - 20px);
+                margin: 12px auto;
+                padding: 20px 16px;
+                max-height: 92dvh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .voucher-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .support-card-inner {
+                padding: 20px 16px;
+            }
+
+            .support-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .support-actions a {
+                min-height: 48px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            footer {
+                padding-bottom: calc(28px + env(safe-area-inset-bottom));
+            }
+        }
+
+        @media (max-width: 380px) {
+            .nav {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 1.55rem;
+            }
+
+            .photo-card {
+                height: 132px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container topbar">
+            <div class="brand">
+                <!-- SVG Wi-Fi Logo Fallback Fix -->
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300f2fe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12.55a11 11 0 0 1 14.08 0'/><path d='M1.42 9a16 16 0 0 1 21.16 0'/><path d='M8.53 16.11a6 6 0 0 1 6.95 0'/><line x1='12' y1='20' x2='12.01' y2='20'/></svg>"
+                    alt="BUREAU Logo" class="brand-logo">
+                <div class="brand-text">
+                    <strong>BUREAU Wi-Fi</strong>
+                    <span>Reliable Wi‑Fi Access</span>
+                </div>
+            </div>
+
+            <nav class="nav" aria-label="Main navigation">
+                <a href="/index.html">HOME</a>
+                <a href="/movies"> MOVIES</a>
+                <a href="/jobs.html">GET JOBS</a>
+                <a class="primary" href="#plans">GET WI‑FI</a>
+                <a class="secondary" href="/credit.html">GET QUICK LOAN</a>
+            </nav>
+        </div>
+
+        <div class="hero">
+            <div class="hero-stars" aria-hidden="true"></div>
+            <div class="hero-dishes" aria-hidden="true"></div>
+            <div class="holo-orbit" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span>
+            </div>
+            <div class="container hero-grid">
+                <div>
+                    <div class="eyebrow holo-eyebrow">🛰 Fast, secure internet • Globe uplink live</div>
+                    <h1 class="holo-title">Smart Wi‑Fi access for work, business, and everyday browsing.</h1>
+                    <p>Choose a package that fits your day and enjoy dependable internet access with quick mobile-money
+                        payments and friendly support.</p>
+
+                    <div class="hero-actions">
+                        <a class="button primary holo-btn" href="#plans">CHOOSE A PLAN</a>
+                        <a class="button secondary holo-btn" href="/jobs.html">GET JOBS</a>
+                    </div>
+                </div>
+
+                <div class="hero-panel holo-card">
+                    <h3>Why customers choose Bureau Wi‑Fi</h3>
+                    <ul>
+                        <li>Fast and stable connection</li>
+                        <li>Easy payment with mobile money</li>
+                        <li>Flexible packages for daily use</li>
+                        <li>Business-ready support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- PHOTO GRID -->
+            <div class="photo-grid">
+                <div class="photo-card holo-card"
+                    style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop');">
+                    <div class="photo-card-content">Upgraded Remote Payments Active</div>
+                </div>
+                <div class="photo-card holo-card"
+                    style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop');">
+                    <div class="photo-card-content">Mobile Business Connectivity</div>
+                </div>
+                <div class="photo-card holo-card"
+                    style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop');">
+                    <div class="photo-card-content">Professional Office Environment</div>
+                </div>
+            </div>
+
+            <div class="intro" id="plans">
+                <h2 class="holo-title">Choose Your Wi‑Fi Package</h2>
+                <p>Pick a package below and complete your payment in a few taps.</p>
+            </div>
+
+            <div class="stepper" aria-label="Purchase steps">
+                <div class="step active">1. Select</div>
+                <div class="step">2. Pay</div>
+                <div class="step">3. Connect</div>
+            </div>
+
+            <div class="packages">
+                <div class="package holo-card">
+                    <div>
+                        <h3>1 Hour</h3>
+                        <p>Quick access for urgent browsing or short work sessions.</p>
+                        <div class="price holo-price"><strong>UGX 200</strong><small>1 hour</small></div>
+                        <ul class="package-features">
+                            <li>Reliable internet</li>
+                            <li>Ideal for quick tasks</li>
+                        </ul>
+                    </div>
+                    <button class="buy-button holo-btn" onclick="choosePackage('1 Hour', 200)">Select</button>
+                </div>
+
+                <div class="package popular holo-card">
+                    <span class="badge">Popular</span>
+                    <div>
+                        <h3>3 Hours</h3>
+                        <p>Perfect for meetings, online work, and comfortable browsing.</p>
+                        <div class="price holo-price"><strong>UGX 600</strong><small>3 hours</small></div>
+                        <ul class="package-features">
+                            <li>Great for office work</li>
+                            <li>Fast enough for streaming</li>
+                        </ul>
+                    </div>
+                    <button class="buy-button holo-btn" onclick="choosePackage('3 Hours', 600)">Select</button>
+                </div>
+
+                <div class="package holo-card">
+                    <div>
+                        <h3>2 Days</h3>
+                        <p>Extended connectivity for longer daily sessions and tasks.</p>
+                        <div class="price holo-price"><strong>UGX 1000</strong><small>24hours</small></div>
+                        <ul class="package-features">
+                            <li>Budget-focused value</li>
+                            <li>Convenient long access</li>
+                        </ul>
+                    </div>
+                    <button class="buy-button holo-btn" onclick="choosePackage('24 Hours', 1000)">Select</button>
+                </div>
+
+                <div class="package holo-card">
+                    <div>
+                        <h3>Weekly</h3>
+                        <p>Ideal for regular use throughout the week without interruption.</p>
+                        <div class="price holo-price"><strong>UGX 5000</strong><small>7 days</small></div>
+                        <ul class="package-features">
+                            <li>Consistent access</li>
+                            <li>Best for frequent users</li>
+                        </ul>
+                    </div>
+                    <button class="buy-button holo-btn" onclick="choosePackage('7 Days', 5000)">Select</button>
+                </div>
+
+                <div class="package holo-card">
+                    <div>
+                        <h3>Monthly</h3>
+                        <p>Our most value-packed offering for reliable long-term internet use.</p>
+                        <div class="price holo-price"><strong>UGX 20,000</strong><small>30 days</small></div>
+                        <ul class="package-features">
+                            <li>Best value package</li>
+                            <li>Designed for regular users</li>
+                        </ul>
+                    </div>
+                    <button class="buy-button holo-btn" onclick="choosePackage('30 Days', 20000)">Select</button>
+                </div>
+
+                <div class="package holo-card">
+                    <div>
+                        <h3>Bureau Movies</h3>
+                        <p>Browse the Bureau Movies catalog from this portal.</p>
+                        <div class="price holo-price"><strong>FREE</strong><small>movie access</small></div>
+                        <ul class="package-features">
+                            <li>Movie experience</li>
+                            <li>Bonus entertainment</li>
+                        </ul>
+                    </div>
+                    <a href="/movies" class="movie-button holo-btn">Watch</a>
+                </div>
+
+            </div>
+
+            <h3 class="more-products-title holo-title">More from Bureau</h3>
+            <p class="more-products-sub">Same mobile-money checkout as Wi-Fi. Pick one below to continue.</p>
+            <div class="features">
+                <div class="feature-card holo-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Airtime Top-up</h3>
+                    <p>Instant MTN / Airtel airtime from UGX 500. Same MoMo prompt as Wi-Fi.</p>
+                    <div class="feature-action">
+                        <button class="buy-button holo-btn" onclick="choosePackage('Airtime 1000', 1000)">Top-up UGX
+                            1,000</button>
+                    </div>
+                </div>
+
+                <div class="feature-card holo-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3>Movies VIP Week</h3>
+                    <p>Unlock all VJ-translated releases for 7 days. Best paired with Weekly Wi-Fi.</p>
+                    <div class="feature-action">
+                        <a href="/premium?next=%2Fmovies" class="movie-button holo-btn">Get VIP</a>
+                    </div>
+                </div>
+
+                <div class="feature-card holo-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>Job-Ready Boost</h3>
+                    <p>CV polish + fast verification for job seekers. Get shortlisted faster.</p>
+                    <div class="feature-action">
+                        <a href="/jobs.html" class="job-action-button holo-btn">Boost My Profile</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="helper-strip holo-card">
+                After payment is approved, the team will confirm your activation and you can continue using the internet
+                right away.
+            </div>
+
+            <a class="back" href="/index.html">← Back to Bureau Portal</a>
+        </div>
+    </main>
+
+    <footer>© 2026 Bureau of Business and Credit. Professional Wi‑Fi access made simple.</footer>
+
+    <!-- PAYMENT MODAL -->
+    <div id="paymentModal" class="cyber-modal-overlay">
+        <div class="cyber-modal-content holo-card">
+            <div class="cyber-modal-close" onclick="closePaymentModal()">×</div>
+            <h3 class="cyber-modal-title holo-title">Complete Your Payment</h3>
+
+            <div class="selection-summary">
+                <span>Selected Package: <strong id="selectedPackage">None</strong></span>
+            </div>
+
+            <div id="paymentStatus" class="status-message info">
+                Secure connection active. Enter your mobile money number below to proceed.
+            </div>
+
+            <div id="voucherCard" class="voucher-card" aria-live="polite">
+                <h3>Your Wi-Fi access is ready</h3>
+                <div id="voucherMessage">Connect to the Bureau Wi-Fi network and use these details.</div>
+                <div class="voucher-grid">
+                    <div class="voucher-value"><span class="voucher-label">Username</span><span
+                            id="voucherUsername"></span></div>
+                    <div class="voucher-value"><span class="voucher-label">Password</span><span
+                            id="voucherPassword"></span></div>
+                    <div class="voucher-value"><span class="voucher-label">Valid until</span><span
+                            id="voucherEndsAt"></span></div>
+                </div>
+            </div>
+
+            <label for="phoneNumber">Mobile money number</label>
+            <span class="field-note">Use the number connected to your mobile money wallet, for example 0772 123
+                456.</span>
+            <input type="tel" id="phoneNumber" inputmode="tel" autocomplete="tel" placeholder="e.g. 0772 123 456">
+            <button class="pay-button" onclick="makePayment()">Pay Now</button>
+        </div>
+    </div>
+
+    <script>
+        // Payment API lives on the same origin as this page (server.js serves
+        // both the portal and /api/*). Only allow an explicit override.
+        const paymentApiBase = window.BUREAU_PAYMENT_API_BASE || '';
+        const paymentApiUrl = (path) => `${paymentApiBase}${path}`;
+        let currentPackageName = '';
+        let currentPackagePrice = 0;
+        let pollingInterval = null;
+
+        function setStatus(message, type) {
+            const el = document.getElementById('paymentStatus');
+            el.textContent = message;
+            el.className = 'status-message ' + type;
+        }
+
+        function choosePackage(packageName, price) {
+            currentPackageName = packageName;
+            currentPackagePrice = Number(price);
+            document.getElementById('selectedPackage').textContent = `${packageName} — UGX ${price}`;
+            setStatus('Package selected. Please enter your mobile money number.', 'info');
+
+            document.querySelectorAll('.package').forEach((card) => {
+                const heading = card.querySelector('h3');
+                card.classList.toggle('selected', heading && heading.textContent.trim() === packageName);
+            });
+
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target === modal) {
+                closePaymentModal();
+            }
+        }
+
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
+
+        function showVoucher(entitlement) {
+            const card = document.getElementById('voucherCard');
+            const access = entitlement && entitlement.access;
+            if (!entitlement || !access) {
+                if (entitlement && entitlement.provisioning && entitlement.provisioning.status === 'PENDING_PROVIDER') {
+                    setStatus('Payment approved. Access is waiting for network activation.', 'info');
+                }
+                return;
+            }
+            document.getElementById('voucherUsername').textContent = access.username;
+            document.getElementById('voucherPassword').textContent = access.password;
+            document.getElementById('voucherEndsAt').textContent = new Date(entitlement.endsAt).toLocaleString();
+            card.style.display = 'block';
+        }
+
+        async function updatePaymentStatus(referenceId) {
+            if (!referenceId) return;
+
+            try {
+                const response = await fetch(paymentApiUrl(`/api/payment/${encodeURIComponent(referenceId)}`), { credentials: 'include' });
+                const result = await response.json();
+
+                if (!result || !result.success || !result.payment) {
+                    setStatus('Unable to fetch payment status right now.', 'error');
+                    return;
+                }
+
+                const status = (result.payment.status || 'PENDING').toUpperCase();
+
+                if (status === 'PAID' || status === 'SUCCESS' || status === 'SUCCESSFUL') {
+                    showVoucher(result.entitlement);
+                    const provisioningStatus = result.entitlement?.provisioning?.status;
+                    const message = result.entitlement?.access && provisioningStatus === 'PROVISIONED'
+                        ? 'Payment approved. Your Wi-Fi voucher is ready below.'
+                        : provisioningStatus === 'FAILED'
+                            ? 'Payment approved, but Wi-Fi activation needs assistance. Please contact support.'
+                            : 'Payment approved. Your Wi-Fi access is being prepared.';
+                    setStatus(message, provisioningStatus === 'FAILED' ? 'error' : 'success');
+                    stopPolling();
+                    return;
+                }
+
+                if (status === 'FAILED' || status === 'REJECTED' || status === 'TIMEOUT' || status === 'CANCELLED') {
+                    setStatus('Payment failed, timed out, or was rejected. Please try again.', 'error');
+                    stopPolling();
+                    return;
+                }
+
+                if (status === 'PENDING') {
+                    setStatus('Payment is still pending. Please approve the request on your phone.', 'info');
+                    return;
+                }
+
+                setStatus(`Payment status: ${status}. Waiting for confirmation...`, 'info');
+            } catch (error) {
+                console.error('Status polling error:', error);
+                setStatus('Status check failed. Please wait a moment and try again.', 'error');
+            }
+        }
+
+        function startStatusPolling(referenceId) {
+            stopPolling();
+            updatePaymentStatus(referenceId);
+            pollingInterval = setInterval(() => updatePaymentStatus(referenceId), 5000);
+        }
+
+        async function makePayment() {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const payButton = document.querySelector('.pay-button');
+
+            if (!currentPackageName || currentPackagePrice <= 0) {
+                setStatus('Please select a package first.', 'error');
+                return;
+            }
+
+            if (!phoneNumber) {
+                setStatus('Please enter your MTN or Airtel number.', 'error');
+                return;
+            }
+
+            const validPhonePattern = /^(?:\+256|256|0)?[0-9]{9,10}$/;
+            if (!validPhonePattern.test(phoneNumber)) {
+                setStatus('Please enter a valid MTN or Airtel number.', 'error');
+                return;
+            }
+
+            setStatus('Sending payment request...', 'info');
+            payButton.disabled = true;
+            payButton.textContent = 'Sending...';
+
+            try {
+                const response = await fetch(paymentApiUrl('/api/payment'), {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        packageName: currentPackageName,
+                        amount: currentPackagePrice,
+                        phone: phoneNumber
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    setStatus('Payment request sent. Please approve it on your phone.', 'success');
+                    startStatusPolling(result.referenceId);
+                } else {
+                    const detail = result.details ? ` Details: ${result.details}` : '';
+                    setStatus((result.message || 'Payment failed.') + detail, 'error');
+                    // Order is still saved as PENDING server-side — keep polling
+                    // so an approved MoMo prompt still unlocks the voucher.
+                    if (result.referenceId) startStatusPolling(result.referenceId);
+                }
+            } catch (error) {
+                console.error('Connection error:', error);
+                setStatus('Could not connect to the payment server. Please try again.', 'error');
+            } finally {
+                payButton.disabled = false;
+                payButton.textContent = 'Pay Now';
+            }
+        }
+    </script>
+</body>
+
+</html

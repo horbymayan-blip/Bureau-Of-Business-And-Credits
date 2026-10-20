@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bureau Of Business And Credit | Staffing & Employment Uganda</title><link rel="stylesheet" href="/bureau-theme.css"><script src="/bureau-theme.js" defer></script>
+    <meta name="description"
+        content="Bureau of Business and Credit connects employers and job seekers across Uganda through staffing, recruitment, business support, and digital services.">
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-dark: #0c1a33;
+            --primary-soft: rgba(56, 189, 248, 0.12);
+            --accent: #f43f5e;
+            --success: #34d399;
+            --cyber-glow: #00f2fe;
+            --space-violet: #8b5cf6;
+            --bg-deep: #030712;
+            --bg-navy: #0a1930;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --line: rgba(56, 189, 248, 0.18);
+            --card: rgba(11, 19, 36, 0.72);
+            --glass-border: rgba(0, 242, 254, 0.22);
+            --shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+            --holo-gradient: linear-gradient(115deg, #00f2fe, #7dd3fc 20%, #a78bfa 40%, #ff7cf5 60%, #00f2fe 80%, #4ade80 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            /* Deep space navy + faint holographic circuit texture + cyber-grid mesh */
+            background:
+                radial-gradient(circle at 15% 8%, rgba(0, 242, 254, 0.1), transparent 42%),
+                radial-gradient(circle at 85% 18%, rgba(139, 92, 246, 0.12), transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(13, 71, 161, 0.25), transparent 60%),
+                linear-gradient(180deg, rgba(3, 7, 18, 0.88) 0%, rgba(7, 17, 34, 0.9) 45%, rgba(10, 25, 48, 0.95) 100%),
+                url('/assets/connectivity.jpg') no-repeat center top / cover,
+                linear-gradient(180deg, #030712 0%, #071122 45%, #0a1930 100%);
+            background-color: var(--bg-deep);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Subtle tech mesh / blueprint grid overlay across whole page */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+                linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+            background-size: 56px 56px, 56px 56px, 14px 14px, 14px 14px;
+            mask-image: linear-gradient(180deg, black 0%, rgba(0, 0, 0, 0.7) 60%, rgba(0, 0, 0, 0.4) 100%);
+            -webkit-mask-image: linear-gradient(180deg, black 0%, rgba(0, 0, 0, 0.7) 60%, rgba(0, 0, 0, 0.4) 100%);
+        }
+
+        /* Soft vignette to keep text crystal clear */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse 90% 60% at 50% 0%, transparent 55%, rgba(3, 7, 18, 0.55) 100%);
+        }
+
+        main,
+        header,
+        footer,
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        .container {
+            width: min(1180px, calc(100% - 28px));
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(4, 13, 33, 0.92), rgba(11, 31, 68, 0.88));
+            color: var(--text);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 0;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+        }
+
+        .brand-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            object-fit: cover;
+            box-shadow: 0 0 16px rgba(0, 242, 254, 0.35);
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid var(--glass-border);
+            padding: 5px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: rgba(241, 245, 249, 0.88);
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--cyber-glow);
+            text-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+        }
+
+        .nav a.primary {
+            background: linear-gradient(115deg, #0d47a1, #00c6ff);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 18px;
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.25);
+        }
+
+        .hero {
+            position: relative;
+            isolation: isolate;
+            /* Same top image as bitds.html hero, polished with holographic cyber finish */
+            background:
+                linear-gradient(90deg, rgba(4, 12, 28, 0.96) 0%, rgba(5, 15, 34, 0.84) 40%, rgba(5, 15, 34, 0.42) 66%, rgba(10, 25, 47, 0.50) 100%),
+                radial-gradient(ellipse 55% 60% at 12% 20%, rgba(0, 242, 254, 0.16), transparent 65%),
+                radial-gradient(ellipse 50% 55% at 88% 12%, rgba(139, 92, 246, 0.18), transparent 65%),
+                linear-gradient(115deg, rgba(0, 242, 254, 0.10), rgba(139, 92, 246, 0.10) 55%, rgba(255, 124, 245, 0.06)),
+                url('/assets/recruitment-hero.jpg') no-repeat center 43% / cover,
+                linear-gradient(180deg, #030712, #0a1930);
+            background-color: #030712;
+            padding: 88px 0 70px;
+            border-bottom: 1px solid var(--glass-border);
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(0, 242, 254, 0.18), inset 0 -28px 60px rgba(3, 7, 18, 0.55);
+        }
+
+        /* Fine blueprint grid inside hero only */
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(0, 242, 254, 0.09) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.09) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: radial-gradient(ellipse 75% 85% at 50% 30%, black 30%, transparent 78%);
+            -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 30%, black 30%, transparent 78%);
+            pointer-events: none;
+        }
+
+        /* Holographic glow sweep + scanline sheen across hero (matches wifi page) */
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 4px),
+                linear-gradient(to bottom, transparent 58%, rgba(7, 19, 38, 0.92) 100%),
+                linear-gradient(115deg, transparent 42%, rgba(0, 242, 254, 0.10) 48%, rgba(255, 124, 245, 0.10) 52%, transparent 58%),
+                conic-gradient(from 180deg at 50% 40%, rgba(0, 242, 254, 0.07), rgba(167, 139, 250, 0.09), rgba(255, 124, 245, 0.06), rgba(0, 242, 254, 0.07));
+            background-size: auto, auto, 250% 250%, auto;
+            filter: blur(0.5px);
+            animation: hero-holo-drift 16s ease-in-out infinite alternate, hero-holo-sheen 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes hero-holo-drift {
+            from {
+                transform: translate3d(-1%, -1%, 0) scale(1);
+                filter: blur(0.5px) brightness(1);
+            }
+
+            to {
+                transform: translate3d(1%, 1%, 0) scale(1.03);
+                filter: blur(0.5px) brightness(1.08);
+            }
+        }
+
+        @keyframes hero-holo-sheen {
+            0% {
+                background-position: 0 0, 0 0, 0% 20%, 0 0;
+            }
+
+            50% {
+                background-position: 0 0, 0 0, 100% 80%, 0 0;
+            }
+
+            100% {
+                background-position: 0 0, 0 0, 0% 20%, 0 0;
+            }
+        }
+
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            background: linear-gradient(to bottom, #ffffff 45%, #a5c4e8 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            filter: drop-shadow(0 4px 22px rgba(0, 242, 254, 0.22)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: linear-gradient(115deg, rgba(0, 242, 254, 0.18), rgba(139, 92, 246, 0.18));
+            background-size: 200% 200%;
+            animation: eyebrow-pan 6s ease infinite;
+            border: 1px solid var(--glass-border);
+            color: var(--cyber-glow);
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        @keyframes eyebrow-pan {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* ===== CREDIT SECTION ===== */
+        .credit-bar {
+            background: linear-gradient(135deg, rgba(7, 45, 104, 0.9), rgba(0, 150, 180, 0.5));
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #fff;
+            padding: 14px 0;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .credit-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .credit-bar .credit-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .credit-bar .credit-title i {
+            font-size: 1.1rem;
+        }
+
+        .credit-bar .credit-note {
+            opacity: 0.9;
+        }
+
+        .hero>.container {
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 34px;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0 0 18px;
+            font-size: clamp(2.5rem, 5vw, 4.3rem);
+            line-height: 1.08;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: 1.08rem;
+            color: #cbd5e1;
+            max-width: 620px;
+        }
+
+        .industry-intro {
+            margin-top: 18px !important;
+            color: var(--cyber-glow) !important;
+            font-size: 0.92rem !important;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .industry-list {
+            margin: 12px 0 0;
+            padding-left: 22px;
+            color: #cbd5e1;
+            display: grid;
+            gap: 6px;
+            font-size: 0.96rem;
+        }
+
+        .industry-list li::marker {
+            color: var(--cyber-glow);
+            font-weight: 800;
+        }
+
+        .hero-actions {
+            margin-top: 28px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .primary-actions {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .primary-action {
+            display: grid;
+            gap: 6px;
+            min-height: 112px;
+            align-content: center;
+            padding: 18px;
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            background: rgba(11, 19, 36, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            color: #fff;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .primary-action:hover {
+            transform: translateY(-2px);
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 22px rgba(0, 242, 254, 0.25);
+        }
+
+        .primary-action strong {
+            font-size: 1.05rem;
+            color: #fff;
+        }
+
+        .primary-action span {
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .primary-action.wifi {
+            border-top: 4px solid #00f2fe;
+        }
+
+        .primary-action.work {
+            border-top: 4px solid var(--primary);
+        }
+
+        .primary-action.hire {
+            border-top: 4px solid var(--accent);
+        }
+
+        .primary-action.study {
+            border-top: 4px solid var(--space-violet);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 14px 22px;
+            font-weight: 800;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:hover {
+            transform: translateY(-1px);
+        }
+
+        .button.primary {
+            background: linear-gradient(115deg, #0d47a1, #00c6ff 60%, #8b5cf6);
+            background-size: 200% 200%;
+            animation: btn-holo 6s ease infinite;
+            color: #fff;
+            border: 1px solid rgba(0, 242, 254, 0.45);
+            box-shadow: 0 0 22px rgba(0, 242, 254, 0.3);
+        }
+
+        @keyframes btn-holo {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .button.secondary {
+            background: rgba(11, 19, 36, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            box-shadow: none;
+        }
+
+        .hero-panel {
+            background: rgba(11, 19, 36, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.12), var(--shadow);
+        }
+
+        .hero-panel h3 {
+            margin: 0 0 12px;
+            font-size: 1.9rem;
+            color: #fff;
+        }
+
+        .hero-panel p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .hero-pathways {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .pathway {
+            display: block;
+            padding: 15px;
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: #fff;
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .pathway:hover {
+            transform: translateY(-2px);
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.25);
+        }
+
+        @media (max-width: 700px) {
+            .primary-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .primary-action {
+                min-height: 86px;
+            }
+        }
+
+        .pathway strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .pathway span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        section {
+            padding: 72px 0;
+        }
+
+        .photo-showcase {
+            padding-top: 32px;
+            padding-bottom: 12px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        .photo-card {
+            overflow: hidden;
+            border-radius: 22px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            min-height: 250px;
+        }
+
+        .photo-card.large {
+            min-height: 330px;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.05) contrast(1.02);
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: clamp(2rem, 3vw, 2.9rem);
+            text-shadow: 0 4px 20px rgba(0, 242, 254, 0.2), 0 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.03rem;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        /* Frosted glass cards that pop on the dark grid */
+        .service-card {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--cyber-glow);
+            box-shadow: 0 0 26px rgba(0, 242, 254, 0.22), var(--shadow);
+        }
+
+        .service-icon {
+            width: 54px;
+            height: 54px;
+            display: grid;
+            place-items: center;
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid var(--glass-border);
+            color: var(--cyber-glow);
+            border-radius: 14px;
+            font-size: 1.7rem;
+            margin-bottom: 16px;
+            box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
+        }
+
+        .service-card h3 {
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .service-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.96rem;
+        }
+
+        /* BITDS Section Styles — dark glass */
+        .bitds-section {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, transparent 52%, rgba(0, 242, 254, 0.06) 100%);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .bitds-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        .bitds-card {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 18px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .bitds-card .service-icon {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #c4b5fd;
+        }
+
+        .bitds-card h3 {
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .bitds-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.96rem;
+        }
+
+        .loan-section {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.05) 0%, transparent 52%, rgba(52, 211, 153, 0.06) 100%);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .loan-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        .loan-card {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .loan-card .service-icon {
+            background: rgba(244, 63, 94, 0.12);
+            border-color: rgba(244, 63, 94, 0.35);
+            color: #fda4af;
+            box-shadow: 0 0 14px rgba(244, 63, 94, 0.2);
+        }
+
+        .loan-card h3 {
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .loan-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.96rem;
+        }
+
+        .loan-note {
+            max-width: 720px;
+            margin: 24px auto 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .property-section {
+            background: linear-gradient(135deg, rgba(180, 112, 40, 0.07) 0%, transparent 60%);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        .property-card {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(180, 130, 60, 0.3);
+            border-radius: 18px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .property-card .service-icon {
+            background: rgba(180, 112, 40, 0.14);
+            border-color: rgba(180, 130, 60, 0.35);
+            color: #fcd34d;
+            box-shadow: none;
+        }
+
+        .property-card h3 {
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .property-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.96rem;
+        }
+
+        .property-note {
+            max-width: 780px;
+            margin: 24px auto 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .about-box,
+        .feature-panel {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .about-box h3,
+        .feature-panel h3 {
+            margin: 0 0 14px;
+            color: #fff;
+            font-size: 1.7rem;
+        }
+
+        .about-box p {
+            margin: 0 0 16px;
+            color: var(--muted);
+        }
+
+        .check-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .check-list li {
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .check-list li::before {
+            content: "✓";
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(30, 157, 86, 0.12);
+            color: var(--success);
+            font-weight: 900;
+            display: inline-grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+
+        .feature-panel {
+            background: linear-gradient(135deg, rgba(12, 26, 51, 0.9), rgba(13, 71, 161, 0.55));
+            border-color: var(--glass-border);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.12), var(--shadow);
+        }
+
+        .feature-panel h3 {
+            color: #fff;
+        }
+
+        .feature-boxes {
+            display: grid;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .feature-box strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .feature-box span {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .promo-section {
+            padding-top: 10px;
+            padding-bottom: 8px;
+        }
+
+        .promo-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .promo-card {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            min-height: 420px;
+            position: relative;
+        }
+
+        .promo-visual {
+            position: relative;
+            min-height: 420px;
+            /* Sharp gradient + tech mesh instead of stock photo wash */
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 15%, rgba(0, 242, 254, 0.22), transparent 65%),
+                radial-gradient(ellipse 55% 50% at 85% 80%, rgba(139, 92, 246, 0.22), transparent 65%),
+                linear-gradient(135deg, #0a1930, #0d47a1 55%, #1a1a40);
+            display: flex;
+            align-items: flex-end;
+            padding: 26px;
+            overflow: hidden;
+        }
+
+        .promo-visual::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 242, 254, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.1) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: linear-gradient(180deg, black 20%, transparent 90%);
+            -webkit-mask-image: linear-gradient(180deg, black 20%, transparent 90%);
+        }
+
+        .promo-banner {
+            position: absolute;
+            left: 50%;
+            top: 18px;
+            transform: translateX(-50%);
+            background: rgba(11, 19, 36, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--cyber-glow);
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            z-index: 1;
+        }
+
+        .promo-copy {
+            position: relative;
+            z-index: 1;
+            max-width: 420px;
+        }
+
+        .promo-copy h3 {
+            margin: 0 0 12px;
+            color: var(--card);
+            font-size: clamp(2rem, 3vw, 3rem);
+            line-height: 1.08;
+        }
+
+        .promo-copy p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.06rem;
+        }
+
+        .job-poster {
+            background: rgba(11, 19, 36, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 18px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+        }
+
+        .poster-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .poster-mark {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #0d47a1, #00c6ff);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 900;
+            box-shadow: 0 0 16px rgba(0, 242, 254, 0.3);
+        }
+
+        .promo-badge {
+            display: inline-block;
+            background: linear-gradient(115deg, #0d47a1, #00c6ff);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .job-poster h4 {
+            margin: 0 0 12px;
+            color: #fff;
+            font-size: clamp(1.7rem, 2vw, 2.4rem);
+            line-height: 1.1;
+        }
+
+        .poster-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: start;
+            margin-top: 8px;
+        }
+
+        .job-poster ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .job-poster li::before {
+            content: "✓";
+            color: var(--success);
+            margin-right: 8px;
+            font-weight: 900;
+        }
+
+        .poster-image-box {
+            background: linear-gradient(180deg, rgba(0, 242, 254, 0.08), rgba(139, 92, 246, 0.12));
+            background-image:
+                linear-gradient(rgba(0, 242, 254, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.12) 1px, transparent 1px),
+                linear-gradient(135deg, rgba(10, 25, 47, 0.9), rgba(13, 71, 161, 0.5));
+            background-size: 28px 28px, 28px 28px, cover;
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            min-height: 240px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .poster-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .poster-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(115deg, #0d47a1, #00c6ff 60%, #8b5cf6);
+            background-size: 200% 200%;
+            animation: btn-holo 6s ease infinite;
+            color: #fff;
+            border: 1px solid rgba(0, 242, 254, 0.45);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 800;
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.3);
+        }
+
+        .mini-tag {
+            color: var(--cyber-glow);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .cta {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.05), rgba(139, 92, 246, 0.05));
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .cta-box {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 30px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-box h3 {
+            margin: 0 0 8px;
+            color: #fff;
+            font-size: clamp(1.7rem, 2.5vw, 2.4rem);
+        }
+
+        .cta-box p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .contact-section {
+            padding-top: 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(180px, 1fr));
+            gap: 18px;
+            margin-top: 24px;
+        }
+
+        .contact-card {
+            background: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-card .label {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--cyber-glow);
+            margin-bottom: 10px;
+        }
+
+        .contact-card strong {
+            display: block;
+            font-size: 1.04rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .contact-card span,
+        .contact-card a {
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        footer {
+            background: linear-gradient(180deg, rgba(4, 13, 33, 0.6), #020617);
+            border-top: 1px solid var(--glass-border);
+            color: rgba(255, 255, 255, 0.85);
+            padding: 26px 0 32px;
+        }
+
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        @media (max-width: 900px) {
+
+            .hero-grid,
+            .about-layout,
+            .cta-box {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .services,
+            .bitds-grid {
+                grid-template-columns: repeat(2, minmax(220px, 1fr));
+            }
+        }
+
+        @media (max-width: 620px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .services,
+            .bitds-grid,
+            .loan-grid,
+            .property-grid,
+            .contact-grid,
+            .photo-grid,
+            .hero-grid,
+            .stats-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .hero::after,
+            .eyebrow,
+            .button.primary,
+            .poster-button {
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container topbar">
+            <div class="brand">
+                <img src="/assets/Bureau%20logo.png" alt="Bureau of Business and Credit logo" class="brand-logo">
+                <span>BUREAU OF BUSINESS AND CREDIT</span>
+            </div>
+
+            <nav class="nav" aria-label="Main navigation">
+                <a href="/wifi.html">GET WI-FI</a>
+                <a href="/job-seeker.html">FIND WORK</a>
+                <a class="primary" href="/employer.html">FIND WORKERS</a>
+                <a href="/bitds.html">BITDS</a>
+                <a href="/movies">MOVIES</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <div class="eyebrow">Uganda staffing & business support</div>
+                    <h1>Connecting job owners to job seekers across Uganda.</h1>
+                    <p>
+                        We connect employers with dependable talent and help job seekers find meaningful opportunities
+                        across Uganda's growing economy.
+                    </p>
+                    <p class="industry-intro">Connecting job owners to job seekers across skilled and unskilled job
+                        industries, including:</p>
+                    <ol class="industry-list">
+                        <li>Hotel managers and hospitality supervisors</li>
+                        <li>Cashiers and retail assistants</li>
+                        <li>Secretaries and administrative assistants</li>
+                        <li>Accountants, bookkeepers, and finance clerks</li>
+                        <li>Sales representatives and customer-care officers</li>
+                        <li>Drivers, delivery staff, and boda-boda riders</li>
+                        <li>Security officers, cleaners, and support staff</li>
+                        <li>House maids, housekeepers, and domestic workers</li>
+                        <li>Cleaners, laundry attendants, and gardeners</li>
+                        <li>Construction workers, technicians, and skilled tradespeople</li>
+                        <li>Farm workers, agricultural officers, and agri-business staff</li>
+                        <li>Teachers, caregivers, and health-support workers</li>
+                    </ol>
+
+                    <div class="primary-actions" aria-label="Choose a service">
+                        <a class="primary-action wifi" href="/wifi.html">
+                            <strong>Get Wi-Fi</strong>
+                            <span>Choose a package and connect</span>
+                        </a>
+                        <a class="primary-action work" href="/job-seeker.html">
+                            <strong>Find Work</strong>
+                            <span>Join our job-seeker network</span>
+                        </a>
+                        <a class="primary-action hire" href="/employer.html">
+                            <strong>Find Workers</strong>
+                            <span>Tell us who you need</span>
+                        </a>
+                        <a class="primary-action study" href="/bitds.html">
+                            <strong>Study Computer Science</strong>
+                            <span>Join our online classes</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="eyebrow">Why employers
+                        trust us</div>
+                    <h3>One Bureau. Practical pathways.</h3>
+                    <p>Choose the service that matches your next step. Our team helps turn the first enquiry into a
+                        clear, professional process.</p>
+
+                    <div class="hero-pathways">
+                        <a class="pathway" href="/job-seeker.html">
+                            <strong>Find work</strong>
+                            <span>Join the talent network</span>
+                        </a>
+                        <a class="pathway" href="/employer.html">
+                            <strong>Hire staff</strong>
+                            <span>Share your hiring needs</span>
+                        </a>
+                        <a class="pathway" href="#loans">
+                            <strong>Explore finance</strong>
+                            <span>Review loan solutions</span>
+                        </a>
+                        <a class="pathway" href="#property">
+                            <strong>Property support</strong>
+                            <span>Discuss rental opportunities</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="photo-showcase">
+            <div class="container photo-grid">
+                <div class="photo-card large">
+                    <img src="/assets/recruitment-hero.jpg" alt="Team meeting and staffing partnership" />
+                </div>
+                <div class="photo-card">
+                    <img src="/assets/business-team.jpg" alt="Business professionals discussing growth" />
+                </div>
+                <div class="photo-card">
+                    <img src="/assets/job-opportunities.jpg" alt="Job seekers and business opportunities" />
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>What we do</h2>
+                    <p>Practical staffing and business support solutions designed for growth.</p>
+                </div>
+
+                <div class="services">
+                    <div class="service-card">
+                        <div class="service-icon">👥</div>
+                        <h3>Staffing & Recruitment</h3>
+                        <p>Sourcing and placing reliable workers for temporary, contract, and permanent roles.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">📈</div>
+                        <h3>Business Support</h3>
+                        <p>Helping enterprises expand through labor support, business matching, and operational
+                            planning.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">💼</div>
+                        <h3>Job Matching</h3>
+                        <p>Connecting skilled candidates with employers through a focused and efficient process.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">📶</div>
+                        <h3>Digital Services</h3>
+                        <p>Providing connected solutions such as Wi‑Fi access and online business support for modern
+                            operations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bureau Institute of Technology and Digital Sciences (BITDS) Section Added -->
+        <section id="bitds" class="bitds-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Bureau Institute of Technology and Digital Sciences (BITDS)</h2>
+                    <p>Empowering the next generation of tech talent through practical online computer science and
+                        digital skills classes.</p>
+                </div>
+
+                <div class="bitds-grid">
+                    <article class="bitds-card">
+                        <div class="service-icon">💻</div>
+                        <h3>Computer Science & Programming</h3>
+                        <p>Practical training in coding, software fundamentals, web development, and database
+                            management.</p>
+                    </article>
+
+                    <article class="bitds-card">
+                        <div class="service-icon">🌐</div>
+                        <h3>Digital Literacy & Tools</h3>
+                        <p>Essential computer skills, professional workplace applications, and modern digital
+                            productivity training.</p>
+                    </article>
+
+                    <article class="bitds-card">
+                        <div class="service-icon">🚀</div>
+                        <h3>Tech Career Pathways</h3>
+                        <p>Mentorship, portfolio building, and direct connections to tech employment and freelance
+                            opportunities.</p>
+                    </article>
+                </div>
+
+                <p class="loan-note">Flexible online classes designed for students, working professionals, and aspiring
+                    developers across Uganda.</p>
+                <p class="loan-note"><a class="button primary" href="/bitds.html" style="margin-top: 18px;">Explore the
+                        BITDS campus</a></p>
+            </div>
+        </section>
+
+        <section id="loans" class="loan-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Loan solutions for practical growth</h2>
+                    <p>Flexible financing pathways designed to support households, enterprise, education, and productive
+                        activity.</p>
+                </div>
+
+                <div class="loan-grid">
+                    <article class="loan-card">
+                        <div class="service-icon">💼</div>
+                        <h3>Business Loan</h3>
+                        <p>Working capital and growth support for stock, operations, equipment, or business expansion.
+                        </p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🎓</div>
+                        <h3>School Fees Loan</h3>
+                        <p>Planned education support for families and guardians meeting important school fee
+                            obligations.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🌱</div>
+                        <h3>Agri-Business Loan</h3>
+                        <p>Finance for productive agricultural activity, including inputs, trading, livestock, and value
+                            addition.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🛡️</div>
+                        <h3>Secured Loan</h3>
+                        <p>Financing supported by acceptable security and assessed according to the applicant's capacity
+                            and purpose.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🤝</div>
+                        <h3>Unsecured Loan</h3>
+                        <p>Flexible personal or business support that may be assessed using income, business
+                            performance, and repayment capacity.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">💰</div>
+                        <h3>Salary Loan</h3>
+                        <p>Short-term support for eligible salaried customers, subject to income verification and agreed
+                            repayment terms.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🚙</div>
+                        <h3>Motor Vehicle Loan</h3>
+                        <p>Support for purchasing or improving a productive vehicle for personal, commercial, or
+                            business use.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🏍️</div>
+                        <h3>Boda-Boda Loan</h3>
+                        <p>Practical financing support for eligible riders seeking a motorcycle for income-generating
+                            transport work.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🏠</div>
+                        <h3>Mortgage Loan</h3>
+                        <p>Long-term property financing support for eligible applicants, subject to valuation,
+                            documentation, and approval.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">🔧</div>
+                        <h3>Asset Finance</h3>
+                        <p>Support for acquiring productive equipment, tools, machinery, or other assets that strengthen
+                            operations.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">⚡</div>
+                        <h3>Emergency Loan</h3>
+                        <p>Short-term assistance for urgent personal needs, assessed carefully against affordability and
+                            repayment capacity.</p>
+                    </article>
+
+                    <article class="loan-card">
+                        <div class="service-icon">👥</div>
+                        <h3>Group Loan</h3>
+                        <p>Structured financing for organized groups, associations, and savings teams with clear
+                            objectives and records.</p>
+                    </article>
+                </div>
+
+                <p class="loan-note">All products are subject to eligibility checks, affordability assessment,
+                    documentation, approval, applicable charges, and agreed repayment terms.</p>
+            </div>
+        </section>
+
+        <section id="property" class="property-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Property & Rental Services</h2>
+                    <p>Helping property owners, businesses, and tenants find practical leasing and management solutions.
+                    </p>
+                </div>
+
+                <div class="property-grid">
+                    <article class="property-card">
+                        <div class="service-icon">🏘️</div>
+                        <h3>Property Listing & Sourcing</h3>
+                        <p>We help owners present available homes, rooms, offices, shops, and other spaces to suitable
+                            prospects.</p>
+                    </article>
+
+                    <article class="property-card">
+                        <div class="service-icon">🔑</div>
+                        <h3>Tenant Placement</h3>
+                        <p>We support property owners with enquiries, viewings, tenant referrals, and a clearer
+                            placement process.</p>
+                    </article>
+
+                    <article class="property-card">
+                        <div class="service-icon">🧾</div>
+                        <h3>Property Management</h3>
+                        <p>Practical support for rent follow-up, maintenance coordination, tenant communication, and
+                            property records.</p>
+                    </article>
+
+                    <article class="property-card">
+                        <div class="service-icon">🔄</div>
+                        <h3>Rent-to-Rent Partnerships</h3>
+                        <p>We may partner with property owners to lease, improve, manage, and re-let spaces where the
+                            business case is suitable.</p>
+                    </article>
+
+                    <article class="property-card">
+                        <div class="service-icon">🏬</div>
+                        <h3>Commercial Space Leasing</h3>
+                        <p>Connecting businesses with shops, offices, warehouses, workspaces, and other commercial
+                            opportunities.</p>
+                    </article>
+
+                    <article class="property-card">
+                        <div class="service-icon">🏗️️</div>
+                        <h3>Property Development Partnerships</h3>
+                        <p>Supporting landowners, investors, and builders with opportunities for structured development
+                            and occupancy.</p>
+                    </article>
+                </div>
+
+                <p class="property-note">All property arrangements require clear written agreements. Subletting or
+                    re-letting is only undertaken with the property owner's express permission and after appropriate
+                    legal, financial, and property checks.</p>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container about-layout">
+                <div class="about-box">
+                    <h3>Built for Uganda’s work economy</h3>
+                    <p>Bureau of Business and Credit exists to create stronger linkages between employers and workers
+                        across Uganda. We support job creation, business growth, and reliable workforce placement.</p>
+                    <p>Our mission is simple: help businesses grow with dependable people, and help job seekers discover
+                        meaningful opportunities with confidence.</p>
+                </div>
+
+                <div class="feature-panel">
+                    <h3>Our commitment</h3>
+                    <div class="feature-boxes">
+                        <div class="feature-box">
+                            <strong>Reliable talent</strong>
+                            <span>Qualified candidates matched to the right jobs and work environments.</span>
+                        </div>
+                        <div class="feature-box">
+                            <strong>Professional service</strong>
+                            <span>Clear communication, efficient hiring, and dependable follow-through.</span>
+                        </div>
+                        <div class="feature-box">
+                            <strong>Nationwide reach</strong>
+                            <span>Supporting employers and workers across Uganda from urban to rural centres.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Why employers and job seekers choose us</h2>
+                    <p>We combine staffing expertise with practical business support.</p>
+                </div>
+
+                <div class="about-layout">
+                    <div class="about-box">
+                        <ul class="check-list">
+                            <li>Fast matching for vacancies and candidates</li>
+                            <li>Professional screening and validation support</li>
+                            <li>Flexible staffing for growing businesses</li>
+                            <li>Reliable connection between employers and job seekers</li>
+                            <li>Support for long-term workforce development</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-box">
+                        <h3>We bridge opportunity and capability.</h3>
+                        <p>Whether you are a business looking for reliable staff or a person ready to work, we create a
+                            clear pathway to opportunity.</p>
+                        <p>Our goal is not just recruitment — it is helping strengthen Uganda’s economic participation
+                            and business growth.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="promo-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Hiring & career support</h2>
+                    <p>Helping employers fill roles quickly and job seekers find the right opportunity.</p>
+                </div>
+
+                <div class="promo-grid">
+                    <div class="promo-card">
+                        <div class="promo-visual">
+                            <div class="promo-banner">Job owners & recruitment hub</div>
+                            <div class="promo-copy">
+                                <h3>Looking for workers?</h3>
+                                <p>Place your job order and let us handle the matching process.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="promo-card job-poster">
+                        <div class="poster-header">
+                            <div class="poster-mark">B</div>
+                            <div>Bureau of Business and Credit</div>
+                        </div>
+
+                        <div class="promo-badge">Join our team</div>
+                        <h4>Facilities Cleaner / Caretaker</h4>
+
+                        <div class="poster-body">
+                            <div>
+                                <ul>
+                                    <li>Routine cleaning and property upkeep</li>
+                                    <li>Maintain cleanliness in designated areas</li>
+                                    <li>Handle equipment and cleaning supplies safely</li>
+                                    <li>Support smooth daily operations</li>
+                                </ul>
+                            </div>
+                            <div class="poster-image-box" aria-label="Cleaner at work"></div>
+                        </div>
+
+                        <div class="poster-action">
+                            <a class="poster-button" href="/job-seeker.html">Apply Now</a>
+                            <span class="mini-tag">Full-time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta" id="contact">
+            <div class="container">
+                <div class="cta-box">
+                    <div>
+                        <h3>Ready to hire or get hired?</h3>
+                        <p>Let us help you find the right people or the right opportunity.</p>
+                    </div>
+                    <a class="button primary" href="/employer.html">Register as Employer</a>
+                    <a class="button secondary" href="/job-seeker.html">Join as Job Seeker</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Contact Bureau</h2>
+                    <p>Speak with our team and get matched quickly.</p>
+                </div>
+
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <span class="label">Call us</span>
+                        <strong>+256 766 136 72</strong>
+                        <span>Mon–Sat, 8:00am–6:00pm</span>
+                    </div>
+                    <div class="contact-card">
+                        <span class="label">Email</span>
+                        <strong>hello@bureaubusinessug.com</strong>
+                        <a href="mailto:hello@bureaubusinessug.com">Send an email</a>
+                    </div>
+                    <div class="contact-card">
+                        <span class="label">Visit</span>
+                        <strong>Kampala, Uganda</strong>
+                        <span>Business district offices</span>
+                    </div>
+                    <div class="contact-card">
+                        <span class="label">Support</span>
+                        <strong>Staffing & Wi‑Fi</strong>
+                        <a href="/wifi.html">View Wi‑Fi plans</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">Bureau of Business and Credit</div>
+            <div class="footer-links">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#loans">Loans</a>
+                <a href="#property">Property</a>
+                <a href="/wifi.html">Wi‑Fi</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </footer>

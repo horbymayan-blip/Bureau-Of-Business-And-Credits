@@ -1,0 +1,15 @@
+node_modules/
+data/
+backups/
+.env
+.env.*
+!.env.example
+!.env.production.example
+.git/
+.vs/
+.vscode/
+.agent-cache/
+.continue/
+public/assets/movies/
+*.sqlite
+*.sqlite-*

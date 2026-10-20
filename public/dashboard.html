@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WORKSPACE HUB - BITDS Dashboard</title><link rel="stylesheet" href="/bureau-theme.css"><script src="/bureau-theme.js" defer></script>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #06b6d4;
+      --accent-glow: rgba(6, 182, 212, 0.4);
+      --bg-dark: #050814;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-glow: rgba(6, 182, 212, 0.3);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      background: rgba(5, 8, 20, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-shield {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.8), 0 0 30px var(--accent-glow);
+      position: relative;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      background: linear-gradient(to right, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent);
+    }
+
+    /* Dashboard Layout */
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 100px auto 4rem auto;
+      padding: 0 5%;
+    }
+
+    /* Top Welcome Header Banner */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 2.5rem;
+    }
+
+    .welcome-text h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+
+    .welcome-text p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .pass-badge {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Grid Sections */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .dash-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .dash-card:hover {
+      border-color: var(--border-glow);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .dash-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Active Sandboxes List */
+    .sandbox-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sandbox-item:last-child {
+      border-bottom: none;
+    }
+
+    .sandbox-info h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+      display: inline-block;
+    }
+
+    .sandbox-info span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sandbox-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-launch {
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-launch:hover {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    .btn-stop {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-stop:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* Resource Meters */
+    .metric-row {
+      margin-bottom: 1.25rem;
+    }
+
+    .metric-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .metric-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* Quick Actions Card */
+    .payment-review-panel {
+      grid-column: 1 / -1;
+    }
+
+    .payment-filters {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 1rem 0 1.25rem;
+    }
+
+    .filter-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: rgba(6, 182, 212, 0.4);
+      color: var(--accent);
+    }
+
+    .review-table-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+    }
+
+    table.review-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 920px;
+    }
+
+    .review-table th,
+    .review-table td {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.86rem;
+      vertical-align: top;
+    }
+
+    .review-table th {
+      color: var(--text-muted);
+      font-weight: 700;
+      background: rgba(255,255,255,0.02);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status-pill,
+    .lifecycle-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.28rem 0.65rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .status-pill.pending { background: rgba(245,158,11,0.12); color: #fbbf24; }
+    .status-pill.successful { background: rgba(16,185,129,0.12); color: var(--success); }
+    .status-pill.failed { background: rgba(239,68,68,0.12); color: #fca5a5; }
+
+    .lifecycle-pill.active { background: rgba(16,185,129,0.12); color: var(--success); }
+    .lifecycle-pill.expired { background: rgba(239,68,68,0.12); color: #fca5a5; }
+    .lifecycle-pill.pending { background: rgba(245,158,11,0.12); color: #fbbf24; }
+    .lifecycle-pill.no_access { background: rgba(148,163,184,0.12); color: #cbd5e1; }
+
+    .audit-list {
+      margin: 0;
+      padding-left: 1rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .audit-list li {
+      list-style: disc;
+      margin-bottom: 0.2rem;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .summary-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+    }
+
+    .summary-box .label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+    }
+
+    .summary-box .value {
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .action-tile {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 1.25rem;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+
+    .action-tile:hover {
+      background: rgba(6, 182, 212, 0.05);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .action-tile span {
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-tile p {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Terminal Modal Overlay */
+    .terminal-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 20, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .terminal-window {
+      background: #02040a;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 40px rgba(6, 182, 212, 0.3);
+      width: 100%;
+      max-width: 750px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: #0d1527;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .terminal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .terminal-close:hover {
+      color: var(--accent);
+    }
+
+    .terminal-body {
+      padding: 1.25rem;
+      height: 320px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #38bdf8;
+      line-height: 1.5;
+    }
+
+    .terminal-input-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: #070d1d;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .terminal-prompt {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .terminal-field {
+      flex: 1;
+      background: none;
+      border: none;
+      color: white;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 5%;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo-area">
+      <div class="logo-shield"></div>
+      <span class="brand-title">BITDS</span>
+    </div>
+    <nav class="nav-links">
+     <a href="/index.html">HOME</a>
+      <a href="/wifi.html">GET WI-FI</a>
+      <a href="/movies">BUREAU MOVIES</a>
+      <a href="/jobs.html">GET JOBS</a>
+      <a href="/dashboard.html" class="active">WORKSPACE HUB</a>
+    </nav>
+  </header>
+
+  <!-- Dashboard Main Container -->
+  <div class="dashboard-container">
+
+    <!-- Welcome Header -->
+    <div class="dashboard-header">
+      <div class="welcome-text">
+        <h1>Bureau Hub Dashboard</h1>
+        <p>A Product of BITDS &mdash; Student Operations & Cloud Sandboxes</p>
+      </div>
+      <div class="pass-badge" id="user-plan-badge">Active Pass</div>
+    </div>
+
+    <!-- Main Grid Panels -->
+    <div class="dashboard-grid">
+      
+      <!-- Panel 1: Active Sandboxes -->
+      <div class="dash-card">
+        <h3>⚡ Active Virtual Sandboxes</h3>
+        
+        <div class="sandbox-item" id="box-1">
+          <div class="sandbox-info">
+            <h4><span class="status-dot"></span>Ubuntu 24.04 LTS</h4>
+            <span>ID: c-dev-9842</span>
+          </div>
+          <div class="sandbox-actions">
+            <button class="btn-launch" onclick="openTerminal('Ubuntu 24.04 LTS (c-dev-9842)')">Connect</button>
+            <button class="btn-stop" onclick="toggleSandbox(1)">Stop</button>
+          </div>
+        </div>
+
+        <div class="sandbox-item" id="box-2">
+          <div class="sandbox-info">
+            <h4><span class="status-dot"></span>Kali Linux Pen-Test</h4>
+            <span>ID: c-sec-1104</span>
+          </div>
+          <div class="sandbox-actions">
+            <button class="btn-launch" onclick="openTerminal('Kali Linux Pen-Test (c-sec-1104)')">Connect</button>
+            <button class="btn-stop" onclick="toggleSandbox(2)">Stop</button>
+          </div>
+        </div>
+
+        <div class="sandbox-item" id="box-3">
+          <div class="sandbox-info">
+            <h4><span class="status-dot"></span>PyTorch AI Cluster</h4>
+            <span>ID: c-ai-5520</span>
+          </div>
+          <div class="sandbox-actions">
+            <button class="btn-launch" onclick="openTerminal('PyTorch AI Cluster (c-ai-5520)')">Connect</button>
+            <button class="btn-stop" onclick="toggleSandbox(3)">Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Cloud Resource Metrics -->
+      <div class="dash-card">
+        <h3>📊 Cloud Resource Allocation</h3>
+        <div class="metric-row">
+          <div class="metric-label">
+            <span>CPU Core Usage</span>
+            <span id="cpu-text">4 / 16 Cores</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="cpu-bar" style="width: 25%;"></div>
+          </div>
+        </div>
+        <div class="metric-row" style="margin-top: 1.5rem;">
+          <div class="metric-label">
+            <span>RAM Allocation</span>
+            <span id="ram-text">12.4 GB / 64 GB</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="ram-bar" style="width: 20%;"></div>
+          </div>
+        </div>
+        <div class="metric-row" style="margin-top: 1.5rem;">
+          <div class="metric-label">
+            <span>Persistent NVMe Storage</span>
+            <span>140 GB / 500 GB</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 28%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 3: Quick Navigation -->
+      <div class="dash-card">
+        <h3>🚀 Quick Hub Actions</h3>
+        <div class="quick-actions">
+          <a href="index.html#labs" class="action-tile">
+            <span>💻</span>
+            <p>New Sandbox</p>
+          </a>
+          <a href="index.html#programs" class="action-tile">
+            <span>📚</span>
+            <p>Courseware</p>
+          </a>
+          <a href="index.html#events" class="action-tile">
+            <span>🏆</span>
+            <p>Hackathons</p>
+          </a>
+          <a href="index.html" class="action-tile">
+            <span>🏠</span>
+            <p>Main Portal</p>
+          </a>
+          <a href="/movies" class="action-tile">
+            <span>🎬</span>
+            <p>Bureau Movies</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="dash-card payment-review-panel">
+        <h3>💳 Payment Review & VIP Access</h3>
+        <div class="summary-row" id="payment-summary-row"></div>
+        <div class="payment-filters" aria-label="Payment status filters">
+          <button class="filter-chip active" data-filter="ALL" type="button">All</button>
+          <button class="filter-chip" data-filter="PENDING" type="button">Pending</button>
+          <button class="filter-chip" data-filter="SUCCESSFUL" type="button">Successful</button>
+          <button class="filter-chip" data-filter="FAILED" type="button">Failed</button>
+        </div>
+        <div class="review-table-wrap">
+          <table class="review-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Product</th>
+                <th>Package</th>
+                <th>Amount</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Access</th>
+                <th>Audit trail</th>
+              </tr>
+            </thead>
+            <tbody id="payment-review-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Simulated Terminal Modal -->
+  <div id="terminalModal" class="terminal-modal">
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="terminal-dot dot-red" onclick="closeTerminal()"></span>
+          <span class="terminal-dot dot-yellow"></span>
+          <span class="terminal-dot dot-green"></span>
+        </div>
+        <span id="terminalTitle">BITDS Cloud Container Terminal</span>
+        <button class="terminal-close" onclick="closeTerminal()">&times;</button>
+      </div>
+      <div class="terminal-body" id="terminalOutput">
+        Initializing secure container session...<br>
+        Establishing encrypted WebSocket bridge...<br>
+        Connection established successfully.<br><br>
+        Type commands below (e.g., <span style="color: #f59e0b;">help</span>, <span style="color: #f59e0b;">status</span>, <span style="color: #f59e0b;">clear</span>, <span style="color: #f59e0b;">ls</span>, <span style="color: #f59e0b;">whoami</span>).<br><br>
+      </div>
+      <div class="terminal-input-line">
+        <span class="terminal-prompt">bitds@node:~#</span>
+        <input type="text" id="terminalInput" class="terminal-field" autofocus placeholder="Type command...">
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Bureau Institute of Technology and Digital Sciences. Workspace Hub v2.5.</p>
+  </footer>
+
+  <!-- Interactive Dashboard Script -->
+  <script>
+    // Terminal Elements
+    const terminalModal = document.getElementById('terminalModal');
+    const terminalOutput = document.getElementById('terminalOutput');
+    const terminalInput = document.getElementById('terminalInput');
+    const terminalTitle = document.getElementById('terminalTitle');
+
+    function openTerminal(containerName) {
+      terminalTitle.textContent = "Connected: " + containerName;
+      terminalModal.style.display = 'flex';
+      terminalInput.focus();
+    }
+
+    function closeTerminal() {
+      terminalModal.style.display = 'none';
+    }
+
+    // Handle command inputs
+    terminalInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const cmd = terminalInput.value.trim();
+        if (!cmd) return;
+
+        // Print user command
+        terminalOutput.innerHTML += `bitds@node:~# ${cmd}<br>`;
+        
+        // Evaluate command
+        let response = "";
+        const lowerCmd = cmd.toLowerCase();
+        
+        if (lowerCmd === 'help') {
+          response = "Available commands: <br>- status: View container health<br>- whoami: Print current user profile<br>- ls: List directory files<br>- clear: Clear terminal screen<br>- exit: Disconnect session";
+        } else if (lowerCmd === 'status') {
+          response = "Container Status: ONLINE [OK]<br>Memory load: 18%<br>Uptime: 42 hours, 12 mins";
+        } else if (lowerCmd === 'whoami') {
+          response = "student_innovator@bitds-workspace.edu";
+        } else if (lowerCmd === 'ls') {
+          response = "app.js    package.json    node_modules/    sandbox_config.env    README.md";
+        } else if (lowerCmd === 'clear') {
+          terminalOutput.innerHTML = "";
+          terminalInput.value = "";
+          return;
+        } else if (lowerCmd === 'exit') {
+          closeTerminal();
+          terminalInput.value = "";
+          return;
+        } else {
+          response = `bash: ${cmd}: command not found. Type 'help' for available commands.`;
+        }
+
+        terminalOutput.innerHTML += `${response}<br><br>`;
+        terminalInput.value = "";
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      }
+    });
+
+    // Toggle Sandbox Start/Stop State
+    function toggleSandbox(id) {
+      const box = document.getElementById(`box-${id}`);
+      const dot = box.querySelector('.status-dot');
+      const stopBtn = box.querySelector('.btn-stop');
+      const launchBtn = box.querySelector('.btn-launch');
+      
+      if (stopBtn.textContent === 'Stop') {
+        stopBtn.textContent = 'Start';
+        stopBtn.style.background = 'rgba(16, 185, 129, 0.1)';
+        stopBtn.style.color = 'var(--success)';
+        stopBtn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        dot.style.background = 'var(--danger)';
+        dot.style.boxShadow = '0 0 8px var(--danger)';
+        launchBtn.style.opacity = '0.5';
+        launchBtn.style.pointerEvents = 'none';
+      } else {
+        stopBtn.textContent = 'Stop';
+        stopBtn.style.background = 'rgba(239, 68, 68, 0.1)';
+        stopBtn.style.color = 'var(--danger)';
+        stopBtn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        dot.style.background = 'var(--success)';
+        dot.style.boxShadow = '0 0 8px var(--success)';
+        launchBtn.style.opacity = '1';
+        launchBtn.style.pointerEvents = 'auto';
+      }
+    }
+
+    const paymentReviewBody = document.getElementById('payment-review-body');
+    const paymentSummaryRow = document.getElementById('payment-summary-row');
+    const filterButtons = Array.from(document.querySelectorAll('.filter-chip'));
+    let currentFilter = 'ALL';
+    let paymentReviewData = [];
+
+    function renderSummary(summary = {}) {
+      const cards = [
+        { label: 'Total', value: summary.total || 0 },
+        { label: 'Pending', value: summary.pending || 0 },
+        { label: 'Successful', value: summary.successful || 0 },
+        { label: 'VIP active', value: summary.vipActive || 0 }
+      ];
+
+      paymentSummaryRow.innerHTML = cards.map((card) => `
+        <div class="summary-box">
+          <span class="label">${card.label}</span>
+          <span class="value">${card.value}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderPaymentRows(payments) {
+      const filtered = currentFilter === 'ALL'
+        ? payments
+        : payments.filter((payment) => payment.status === currentFilter);
+
+      if (!filtered.length) {
+        paymentReviewBody.innerHTML = `
+          <tr>
+            <td colspan="8" style="padding: 1.5rem; color: var(--text-muted);">No payment records found for this filter.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      paymentReviewBody.innerHTML = filtered.map((payment) => {
+        const lifecycleClass = String(payment.lifecycle.status || 'no_access').toLowerCase();
+        const statusClass = String(payment.status || 'PENDING').toLowerCase();
+        const auditTrail = (payment.auditTrail || []).slice(-3);
+        const auditHtml = auditTrail.length
+          ? `<ul class="audit-list">${auditTrail.map((event) => `<li>${event.status} · ${new Date(event.createdAt).toLocaleString()}</li>`).join('')}</ul>`
+          : '<span style="color: var(--text-muted);">No audit events</span>';
+
+        return `
+          <tr>
+            <td><strong>${payment.referenceId}</strong></td>
+            <td>${payment.productType === 'movie' ? 'VIP Movie' : 'Wi‑Fi'}</td>
+            <td>${payment.packageName}</td>
+            <td>UGX ${Number(payment.amount || 0).toLocaleString()}</td>
+            <td>${payment.phone || 'Unknown'}</td>
+            <td><span class="status-pill ${statusClass}">${payment.status}</span></td>
+            <td><span class="lifecycle-pill ${lifecycleClass}">${payment.lifecycle.label || payment.lifecycle.status}</span></td>
+            <td>${auditHtml}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function loadPaymentReview() {
+      try {
+        const response = await fetch('/api/admin/payments/review', { headers: { Accept: 'application/json' } });
+        if (!response.ok) {
+          throw new Error(response.statusText || 'Access denied');
+        }
+
+        const data = await response.json();
+        paymentReviewData = data.payments || [];
+        renderSummary(data.summary || {});
+        renderPaymentRows(paymentReviewData);
+      } catch (error) {
+        paymentReviewBody.innerHTML = `
+          <tr>
+            <td colspan="8" style="padding: 1.5rem; color: #fca5a5;">Unable to load payment review. Admin login may be required.</td>
+          </tr>
+        `;
+        renderSummary({ total: 0, pending: 0, successful: 0, vipActive: 0 });
+      }
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach((chip) => chip.classList.toggle('active', chip === button));
+        currentFilter = button.dataset.filter || 'ALL';
+        renderPaymentRows(paymentReviewData);
+      });
+    });
+
+    loadPaymentReview();
+
+    // Simulate subtle live metric fluctuation
+    setInterval(() => {
+      const cpuBar = document.getElementById('cpu-bar');
+      const cpuText = document.getElementById('cpu-text');
+      const ramBar = document.getElementById('ram-bar');
+      const ramText = document.getElementById('ram-text');
+
+      const randomCpu = Math.floor(Math.random() * 15) + 20; // 20% to 35%
+      const randomRam = Math.floor(Math.random() * 5) + 18;  // 18% to 23%
+
+      cpuBar.style.width = randomCpu + '%';
+      cpuText.textContent = `${Math.round(randomCpu * 0.16)} / 16 Cores`;
+
+      ramBar.style.width = randomRam + '%';
+      ramText.textContent = `${(randomRam * 0.64).toFixed(1)} GB / 64 GB`;
+    }, 4000);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+[
+    { "id": 1, "category": "Trending Now", "title": "Kampala Nights", "duration": "1h 45m" },
+    { "id": 2, "category": "Trending Now", "title": "The Startup Odyssey", "duration": "2h 10m" },
+    { "id": 3, "category": "Local Productions", "title": "Savannah Gold", "duration": "1h 50m" }
+]

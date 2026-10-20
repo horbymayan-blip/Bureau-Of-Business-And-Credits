@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bureau Portal Admin</title><link rel="stylesheet" href="/bureau-theme.css"><script src="/bureau-theme.js" defer></script>
+  <style>
+    :root {
+      --primary: #0d47a1;
+      --secondary: #1565c0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --bg: #f3f8ff;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --line: #dbeafe;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #eef6ff, #e0f2fe 45%, #f8fbff);
+      color: var(--text);
+    }
+
+    .topbar {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 22px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 18px rgba(13, 71, 161, 0.18);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      display: block;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2vw, 2.28rem);
+    }
+
+    .topbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 0 18px 36px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: clamp(1.5rem, 2vw, 2.1rem);
+      font-weight: 800;
+    }
+
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: #eff6ff;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .status.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status.paid {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status.failed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .empty {
+      padding: 28px 18px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 24px; }
+    .overview-panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; overflow: hidden; }
+    .overview-panel h2 { margin: 0 0 12px; font-size: 1.05rem; color: var(--primary); }
+    .overview-panel table { margin: 0; font-size: 0.86rem; }
+    @media (max-width: 700px) { .overview-grid { grid-template-columns: 1fr; } }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+    .controls input, .controls select, .controls button { padding: 10px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
+    .controls button { background: var(--primary); color: white; cursor: pointer; font-weight: 700; }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <img src="/assets/Bureau%20logo.png" alt="Bureau of Business and Credit logo" class="brand-logo" />
+      <div>
+        <h1>Bureau Portal Admin</h1>
+        <div style="font-size: 0.8rem; opacity: 0.85; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">Live billing dashboard</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:16px; align-items:center;">
+      <a href="/">Back to Portal</a>
+      <a href="/movies-admin.html" style="color:white; text-decoration:none; font-weight:700;">Movie Manager</a>
+      <a href="/loan-apply.html" style="color:white; text-decoration:none; font-weight:700;">Loan Portal</a>
+      <button type="button" id="logoutButton" style="border:0; background:transparent; color:white; font:inherit; font-weight:700; cursor:pointer;">Sign out</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="controls">
+      <select id="paymentFilter" aria-label="Filter payments"><option value="">All payment statuses</option><option>PENDING</option><option>SUCCESSFUL</option><option>FAILED</option></select>
+      <button type="button" id="exportPayments">Export payments CSV</button>
+      <input id="jobControlId" placeholder="Job ID"><select id="jobControlStatus"><option>OPEN</option><option>PENDING_APPROVAL</option><option>REJECTED</option><option>CLOSED</option></select><button type="button" id="updateJob">Update job</button>
+      <input id="applicationControlId" placeholder="Application ID"><select id="applicationControlStatus"><option>REVIEWING</option><option>SHORTLISTED</option><option>REJECTED</option><option>HIRED</option></select><button type="button" id="updateApplication">Update application</button>
+      <input id="seekerControlId" placeholder="Candidate ID"><button type="button" id="verifySeeker">Verify candidate</button>
+    </div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Payments</div>
+        <div class="stat-value" id="totalPayments">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Paid</div>
+        <div class="stat-value" id="paidCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value" id="pendingCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Job Seekers</div>
+        <div class="stat-value" id="jobSeekerCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Employers</div>
+        <div class="stat-value" id="employerCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Open Jobs</div>
+        <div class="stat-value" id="jobCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Applications</div>
+        <div class="stat-value" id="applicationCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Loan Applications</div>
+        <div class="stat-value" id="loanCount">0</div>
+      </div>
+      <div class="stat-card" style="border-color:#e50914;">
+        <div class="stat-label">🎬 Movie Titles</div>
+        <div class="stat-value" id="movieCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">VIP Active Passes</div>
+        <div class="stat-value" id="vipActive">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Movie Revenue</div>
+        <div class="stat-value" id="movieRevenue">UGX 0</div>
+      </div>
+    </div>
+
+    <section class="overview-panel" style="margin-bottom:24px;">
+      <h2>Loan applications</h2>
+      <div class="controls" style="margin-bottom:12px;">
+        <select id="loanFilter"><option value="">All loan statuses</option><option>SUBMITTED</option><option>UNDER_REVIEW</option><option>APPROVED</option><option>REJECTED</option><option>DISBURSED</option><option>REPAID</option></select>
+        <input id="loanControlId" placeholder="Loan ID (LOAN-...)" style="min-width:220px;" />
+        <select id="loanControlStatus"><option>UNDER_REVIEW</option><option>APPROVED</option><option>REJECTED</option><option>DISBURSED</option><option>REPAID</option></select>
+        <input id="loanControlNote" placeholder="Decision note (optional)" style="min-width:220px;" />
+        <button type="button" id="updateLoan">Update loan</button>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Reference</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Created</th></tr></thead><tbody id="loansBody"></tbody></table></div>
+    </section>
+
+    <div class="overview-grid">
+      <section class="overview-panel"><h2>Jobs</h2><table><thead><tr><th>Title</th><th>District</th><th>Status</th></tr></thead><tbody id="jobsBody"></tbody></table></section>
+      <section class="overview-panel" style="border:2px solid #e50914;"><h2>🎬 BureauMovies — Quick Add</h2><p style="margin:0 0 8px;color:var(--muted);font-size:.9rem;">Publish in seconds. Featured + Premium = 10s billboard teaser.</p><div class="controls" style="margin-bottom:8px;"><input id="qTitle" placeholder="Title e.g. Kampala Nights" style="flex:2;min-width:180px;"><input id="qGenres" placeholder="Category e.g. Trending Now" style="flex:1;min-width:140px;"></div><div class="controls" style="margin-bottom:8px;"><input id="qMedia" placeholder="Media URL /assets/movies/...mp4" style="flex:2;min-width:180px;"><select id="qAccess"><option value="premium">Premium</option><option value="free">Free</option></select><select id="qFeatured"><option value="yes">Featured Yes</option><option value="no">Featured No</option></select></div><div class="controls"><input id="qPoster" placeholder="Poster URL /assets/movies/...jpg (optional — auto fallback art if empty)" style="flex:2;min-width:180px;"><button type="button" id="qPublish">Publish Movie</button><a href="/movies-admin.html" style="align-self:center;font-weight:700;">Open full Movie Manager →</a><a href="/movies" style="align-self:center;font-weight:700;">View site →</a></div><div id="qMsg" role="status" style="font-size:.9rem;color:var(--muted);"></div><table style="margin-top:10px;"><thead><tr><th>Recent</th><th>Access</th><th>Status</th></tr></thead><tbody id="moviesBody"></tbody></table></section>
+      <section class="overview-panel"><h2>Applications</h2><table><thead><tr><th>Job</th><th>Candidate</th><th>Status</th></tr></thead><tbody id="applicationsBody"></tbody></table></section>
+      <section class="overview-panel"><h2>Matches</h2><table><thead><tr><th>Job</th><th>Candidate</th><th>Score</th></tr></thead><tbody id="matchesBody"></tbody></table></section>
+      <section class="overview-panel"><h2>Wi-Fi Entitlements</h2><table><thead><tr><th>Package</th><th>Phone</th><th>Status</th></tr></thead><tbody id="entitlementsBody"></tbody></table></section>
+    </div>
+
+    <section class="overview-panel" style="margin-bottom:24px;">
+      <h2>Private team documents</h2>
+      <p>Files are stored in the configured private Google Drive folder and are not shared publicly.</p>
+      <form id="documentUploadForm" class="controls" enctype="multipart/form-data">
+        <input id="documentFile" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+        <input id="documentProfileId" placeholder="Related profile ID (optional)">
+        <select id="documentProfileType"><option value="">No profile link</option><option value="job-seeker">Job seeker</option><option value="employer">Employer</option></select>
+        <button type="submit">Upload privately</button>
+      </form>
+      <form id="documentLinkForm" class="controls">
+        <input id="driveFileId" placeholder="Existing private Drive file ID" required>
+        <button type="submit">Link Drive file</button>
+      </form>
+      <div id="documentMessage" role="status"></div>
+      <div id="documentsList"></div>
+    </section>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Package</th>
+            <th>Amount</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="paymentTableBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty" style="display:none;">No payments yet.</div>
+    </div>
+  </div>
+
+  <script>
+    async function loadPayments() {
+      try {
+        const paymentStatus = document.getElementById('paymentFilter').value;
+        const response = await fetch('/api/payments');
+        const result = await response.json();
+        const payments = (result.payments || []).filter(payment => !paymentStatus || String(payment.status).toUpperCase() === paymentStatus);
+        const recordsResponse = await fetch('/api/admin/records');
+        const records = await recordsResponse.json();
+
+        const total = payments.length;
+        const paid = payments.filter(p => ['PAID', 'SUCCESSFUL'].includes(String(p.status || '').toUpperCase())).length;
+        const pending = payments.filter(p => String(p.status || '').toUpperCase() === 'PENDING').length;
+
+        document.getElementById('totalPayments').textContent = total;
+        document.getElementById('paidCount').textContent = paid;
+        document.getElementById('pendingCount').textContent = pending;
+        document.getElementById('jobSeekerCount').textContent = records.totals?.jobSeekers || 0;
+        document.getElementById('employerCount').textContent = records.totals?.employers || 0;
+        document.getElementById('jobCount').textContent = records.totals?.jobs || 0;
+        document.getElementById('applicationCount').textContent = records.totals?.applications || 0;
+        document.getElementById('loanCount').textContent = records.totals?.loans || 0;
+        const text = (value) => String(value ?? 'N/A').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+        document.getElementById('jobsBody').innerHTML = (records.jobs || []).slice(0, 8).map(job => `<tr><td>${text(job.title)}</td><td>${text(job.district)}</td><td>${text(job.status)}</td></tr>`).join('') || '<tr><td colspan="3">No jobs yet.</td></tr>';
+        document.getElementById('applicationsBody').innerHTML = (records.applications || []).slice(0, 8).map(application => `<tr><td>${text(application.jobId)}</td><td>${text(application.jobSeekerId)}</td><td>${text(application.status)}</td></tr>`).join('') || '<tr><td colspan="3">No applications yet.</td></tr>';
+        document.getElementById('matchesBody').innerHTML = (records.matches || []).slice(0, 8).map(match => `<tr><td>${text(match.jobId)}</td><td>${text(match.jobSeekerId)}</td><td>${text(match.score)}%</td></tr>`).join('') || '<tr><td colspan="3">No matches yet.</td></tr>';
+        document.getElementById('entitlementsBody').innerHTML = (records.entitlements || []).slice(0, 8).map(entitlement => `<tr><td>${text(entitlement.packageName)}</td><td>${text(entitlement.phone)}</td><td>${text(entitlement.status)}</td></tr>`).join('') || '<tr><td colspan="3">No entitlements yet.</td></tr>';
+
+        const tbody = document.getElementById('paymentTableBody');
+        const emptyState = document.getElementById('emptyState');
+
+        if (!payments.length) {
+          tbody.innerHTML = '';
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+        tbody.innerHTML = payments.map(payment => {
+          const status = String(payment.status || 'PENDING').toUpperCase();
+          const badgeClass = ['PAID', 'SUCCESSFUL'].includes(status) ? 'paid' : ['FAILED', 'REJECTED', 'CANCELLED'].includes(status) ? 'failed' : 'pending';
+          const createdAt = payment.createdAt ? new Date(payment.createdAt).toLocaleString() : 'N/A';
+
+          return `
+            <tr>
+              <td>${text(payment.referenceId)}</td>
+              <td>${text(payment.packageName)}</td>
+              <td>UGX ${Number(payment.amount || 0).toLocaleString()}</td>
+              <td>${text(payment.phone)}</td>
+              <td><span class="status ${text(badgeClass)}">${text(status)}</span></td>
+              <td>${createdAt}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Failed to load payments:', error);
+      }
+    }
+
+    loadPayments();
+    setInterval(loadPayments, 8000);
+    document.getElementById('paymentFilter').addEventListener('change', loadPayments);
+    async function loadLoans() {
+      try {
+        const status = document.getElementById('loanFilter').value;
+        const response = await fetch('/api/admin/loans' + (status ? '?status=' + encodeURIComponent(status) : ''));
+        const result = await response.json();
+        const text2 = (value) => String(value ?? 'N/A').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        document.getElementById('loansBody').innerHTML = (result.loans || []).slice(0, 50).map((loan) => `<tr><td>${text2(loan.id)}</td><td>${text2(loan.fullName)}<br><small>${text2(loan.phone)}</small></td><td>${text2(loan.product)}<br><small>${text2(loan.termMonths)} mo</small></td><td>UGX ${Number(loan.amount || 0).toLocaleString()}</td><td>${text2(loan.status)}</td><td>${loan.createdAt ? new Date(loan.createdAt).toLocaleString() : 'N/A'}</td></tr>`).join('') || '<tr><td colspan="6">No loan applications yet.</td></tr>';
+      } catch (e) { console.error('Failed to load loans:', e); }
+    }
+    loadLoans();
+    setInterval(loadLoans, 10000);
+    document.getElementById('loanFilter').addEventListener('change', loadLoans);
+    document.getElementById('updateLoan').addEventListener('click', async () => {
+      const id = document.getElementById('loanControlId').value.trim();
+      if (!id) { alert('Enter a loan ID.'); return; }
+      const response = await fetch('/api/admin/loans/' + encodeURIComponent(id) + '/status', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: document.getElementById('loanControlStatus').value, decisionNote: document.getElementById('loanControlNote').value }) });
+      if (!response.ok) alert((await response.json()).message || 'Update failed.');
+      else { loadLoans(); loadPayments(); }
+    });
+    document.getElementById('exportPayments').addEventListener('click', () => { window.location.href = '/api/admin/payments.csv?status=' + encodeURIComponent(document.getElementById('paymentFilter').value); });
+    async function updateControl(path, body) { const response = await fetch(path, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); if (!response.ok) alert((await response.json()).message || 'Update failed.'); else loadPayments(); }
+    document.getElementById('updateJob').addEventListener('click', () => updateControl('/api/admin/jobs/' + encodeURIComponent(document.getElementById('jobControlId').value) + '/status', { status: document.getElementById('jobControlStatus').value }));
+    document.getElementById('updateApplication').addEventListener('click', () => updateControl('/api/admin/applications/' + encodeURIComponent(document.getElementById('applicationControlId').value) + '/status', { status: document.getElementById('applicationControlStatus').value }));
+    document.getElementById('verifySeeker').addEventListener('click', () => updateControl('/api/admin/job-seekers/' + encodeURIComponent(document.getElementById('seekerControlId').value) + '/verify', {}));
+
+    async function loadDocuments() {
+      const response = await fetch('/api/admin/documents');
+      const result = await response.json();
+      document.getElementById('documentsList').innerHTML = (result.documents || []).map(document => `<div class="overview-panel"><strong>${text(document.name)}</strong><div>${text(document.mimeType)} · ${text(document.relatedProfileId || 'No profile link')}</div><a href="${text(document.webViewLink || '#')}" target="_blank" rel="noopener">Open in private Drive</a></div>`).join('') || '<p>No documents linked yet.</p>';
+    }
+    document.getElementById('documentUploadForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append('file', document.getElementById('documentFile').files[0]);
+      formData.append('relatedProfileId', document.getElementById('documentProfileId').value);
+      formData.append('relatedProfileType', document.getElementById('documentProfileType').value);
+      const response = await fetch('/api/admin/documents/upload', { method: 'POST', body: formData });
+      const result = await response.json();
+      document.getElementById('documentMessage').textContent = result.message || 'Document uploaded.';
+      if (response.ok) { event.target.reset(); loadDocuments(); }
+    });
+    document.getElementById('documentLinkForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const response = await fetch('/api/admin/documents/link', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ driveFileId: document.getElementById('driveFileId').value }) });
+      const result = await response.json();
+      document.getElementById('documentMessage').textContent = result.message || 'Drive file linked.';
+      if (response.ok) { event.target.reset(); loadDocuments(); }
+    });
+    loadDocuments();
+
+    async function loadMovieStats() {
+      try {
+        const s = await (await fetch('/api/movies/dashboard-stats')).json();
+        document.getElementById('movieCount').textContent = s.totalTitles || 0;
+        document.getElementById('vipActive').textContent = s.activeVipPasses || 0;
+        document.getElementById('movieRevenue').textContent = 'UGX ' + Number(s.totalRevenue || 0).toLocaleString();
+      } catch (e) {}
+      try {
+        const r = await fetch('/api/admin/movies'); const j = await r.json();
+        const t = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        document.getElementById('moviesBody').innerHTML = (j.movies || []).slice(0, 5).map((m) => '<tr><td>' + t(m.title) + (m.featured ? ' ★' : '') + '</td><td>' + t(m.access) + '</td><td>' + t(m.status) + '</td></tr>').join('') || '<tr><td colspan="3">No movies yet.</td></tr>';
+      } catch (e) {}
+    }
+    loadMovieStats(); setInterval(loadMovieStats, 10000);
+    document.getElementById('qPublish').addEventListener('click', async () => {
+      const title = document.getElementById('qTitle').value.trim();
+      const mediaUrl = document.getElementById('qMedia').value.trim();
+      const posterInput = document.getElementById('qPoster');
+      const posterUrl = posterInput ? posterInput.value.trim() : '';
+      const msg = document.getElementById('qMsg');
+      if (!title || !mediaUrl) { msg.textContent = 'Title + Media URL required. Upload file in Movie Manager first.'; return; }
+      const r = await fetch('/api/admin/movies', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, year: new Date().getFullYear(), runtime: '2h 00m', description: title + ' — ' + (document.getElementById('qGenres').value || 'General'), genres: document.getElementById('qGenres').value || 'Trending Now', access: document.getElementById('qAccess').value, status: 'published', featured: document.getElementById('qFeatured').value, mediaUrl, posterUrl: posterUrl || null }) });
+      const j = await r.json(); msg.textContent = j.movie ? ('Published: ' + j.movie.title) : (j.message || 'Failed');
+      if (r.ok) { document.getElementById('qTitle').value = ''; document.getElementById('qMedia').value = ''; if (posterInput) posterInput.value = ''; loadMovieStats(); }
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login.html';
+    });
+  </script>
+</body>
+</html>

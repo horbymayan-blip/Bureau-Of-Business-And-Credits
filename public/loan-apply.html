@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apply for a Loan | Bureau Credit</title>
+<style>
+:root{--primary:#0d47a1;--line:rgba(59,130,246,.3);--bg:#030712;--text:#f1f5f9;--muted:#94a3b8}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--text);background:#030712;line-height:1.6}
+.container{width:min(1100px,calc(100% - 28px));margin:0 auto}
+header{background:#0a1930;border-bottom:1px solid var(--line)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand img{width:44px;height:44px;border-radius:10px}
+nav a{margin-left:14px;color:var(--muted);text-decoration:none;font-weight:700}
+main{padding:28px 0 60px}.lede{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:#0b1324;border:1px solid var(--line);border-radius:16px;padding:20px}
+form.apply{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:grid;gap:6px;font-size:.88rem;color:var(--muted)}
+.field.full{grid-column:1/-1}
+input,select,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #334155;background:#020617;color:var(--text);font:inherit}
+button{font:inherit;font-weight:800;border:0;border-radius:999px;padding:12px 18px;background:#22c55e;color:#04120a;cursor:pointer}
+button.secondary{background:transparent;color:var(--text);border:1px solid #475569}
+#message{min-height:22px;margin-top:12px;font-weight:700}
+.quote{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:14px;margin-top:14px}
+.quote.show{display:block}.track-item{border:1px solid #334155;border-radius:12px;padding:12px;margin-top:10px}
+.status{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.75rem;background:#0ea5e9;color:#fff}
+</style></head><body>
+<header><div class="container topbar"><div class="brand"><span>BUREAU CREDIT - LOANS</span></div><nav><a href="/credit.html">Credit</a><a href="/index.html">Home</a></nav></div></header>
+<main class="container"><h1>Get a loan in minutes</h1>
+<p class="lede">Apply online, see your monthly repayment instantly, track approval by phone, repay with MTN MoMo or Airtel Money.</p>
+<div class="grid"><section class="card"><h2>Application</h2>
+<form id="loanForm" class="apply">
+<label class="field">Full name<input name="fullName" required maxlength="120" /></label>
+<label class="field">Phone<input name="phone" required placeholder="07XXXXXXXX" /></label>
+<label class="field">Email<input name="email" type="email" required /></label>
+<label class="field">District<input name="district" required maxlength="80" /></label>
+<label class="field">Employment<select name="employmentStatus" required><option value="">Select...</option><option>Employed</option><option>Self-employed</option><option>Business owner</option><option>Farmer</option><option>Other</option></select></label>
+<label class="field">Product<select name="product" id="product" required><option value="">Loading...</option></select></label>
+<label class="field">Term<select name="termMonths" id="term" required><option value="">Select product</option></select></label>
+<label class="field">Amount<input name="amount" id="amount" type="number" min="50000" step="1000" required /></label>
+<label class="field">Monthly income<input name="monthlyIncome" type="number" min="1" step="1000" required /></label>
+<label class="field full">Purpose<textarea name="purpose" required maxlength="1000"></textarea></label>
+<div class="field full"><button id="submitBtn" type="submit">Submit application</button></div>
+</form><div class="quote" id="quoteBox"><div id="qText">Estimate appears here.</div></div><div id="message"></div>
+</section><aside><section class="card"><h2>Track + repay</h2>
+<form id="trackForm" style="display:grid;gap:10px"><input name="trackPhone" required placeholder="07XXXXXXXX" /><button class="secondary" type="submit">Track</button></form>
+<div id="trackResults"></div></section></aside></div></main>
+
+<script>(function(){var p=document.getElementById('product'),t=document.getElementById('term'),a=document.getElementById('amount'),m=document.getElementById('message'),q=document.getElementById('quoteBox'),qt=document.getElementById('qText'),list=[];
+var fmt=function(n){return 'UGX '+Number(n||0).toLocaleString()};
+function msg(x,k){m.textContent=x;m.style.color=k==='e'?'#fda4af':'#86efac'}
+async function load(){try{var r=await fetch('/api/loans/products');var d=await r.json();list=d.products||[];p.innerHTML='<option value="">Select...</option>'+list.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join('')}catch(e){p.innerHTML='<option value="">Failed to load</option>'}}
+function terms(){var f=list.find(function(x){return x.name===p.value});t.innerHTML=f?f.terms.map(function(n){return '<option value="'+n+'">'+n+' months</option>'}).join(''):'<option value="">Select product</option>';quote()}
+async function quote(){if(!p.value||!a.value||!t.value){q.classList.remove('show');return}try{var r=await fetch('/api/loans/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:p.value,amount:Number(a.value),termMonths:Number(t.value)})});var d=await r.json();if(!r.ok)throw new Error();qt.textContent='Borrow '+fmt(d.quote.principal)+' | Interest '+fmt(d.quote.interest)+' | Total '+fmt(d.quote.total)+' | Monthly '+fmt(d.quote.monthly);q.classList.add('show')}catch(e){q.classList.remove('show')}}
+p.addEventListener('change',terms);t.addEventListener('change',quote);a.addEventListener('input',quote);
+document.getElementById('loanForm').addEventListener('submit',async function(e){e.preventDefault();var b=document.getElementById('submitBtn');b.disabled=true;msg('Submitting...');try{var f=Object.fromEntries(new FormData(e.target).entries());var r=await fetch('/api/loans/apply',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(f)});var d=await r.json();if(!r.ok)throw new Error(d.message);msg('Received! Ref '+d.application.id+'. Monthly '+fmt(d.quote.monthly));e.target.reset()}catch(err){msg(err.message,'e')}b.disabled=false});
+document.getElementById('trackForm').addEventListener('submit',async function(e){e.preventDefault();var box=document.getElementById('trackResults');box.textContent='Checking...';try{var ph=new FormData(e.target).get('trackPhone');var r=await fetch('/api/loans/track?phone='+encodeURIComponent(ph));var d=await r.json();if(!r.ok)throw new Error(d.message);if(!d.applications.length){box.textContent='No loans for that number.';return}box.innerHTML=d.applications.map(function(x){return '<div class="track-item"><b>'+x.product+'</b> '+fmt(x.amount)+' <span class="status">'+x.status+'</span><br>'+x.id+' | '+(x.quote?fmt(x.quote.monthly)+'/mo':'')+(x.status==='APPROVED'||x.status==='DISBURSED'?'<form data-id="'+x.id+'" style="display:flex;gap:8px;margin-top:8px"><input name="phone" required placeholder="MoMo 07XXXXXXXX" /><button>Repay</button></form>':'')+'</div>'}).join('');box.querySelectorAll('form[data-id]').forEach(function(f){f.addEventListener('submit',async function(ev){ev.preventDefault();var fd=Object.fromEntries(new FormData(f).entries());var rr=await fetch('/api/loans/'+f.dataset.id+'/repay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fd)});var jj=await rr.json();alert(jj.message||'Done')})})}catch(err){box.textContent=err.message}});
+load()})();</script></body></html>

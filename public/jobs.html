@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bureau Jobs & BITDS - Uganda's Premier Virtual Employment Hub</title><link rel="stylesheet" href="/bureau-theme.css"><script src="/bureau-theme.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --bg-soft: #0b1226;
+            --glass-bg: rgba(15, 23, 42, 0.82);
+            --glass-bg-2: rgba(17, 25, 46, 0.92);
+            --glass-border: rgba(56, 189, 248, 0.22);
+            --card-bg: linear-gradient(180deg, rgba(21,32,58,0.95), rgba(10,18,36,0.96));
+            --neon-green: #10b981;
+            --neon-blue: #0ea5e9;
+            --cyber-glow: #00f2fe;
+            --space-violet: #8b5cf6;
+            --holo-pink: #ff7cf5;
+            --holo-lime: #4ade80;
+            --cyber-red: #f43f5e;
+            --gold: #facc15;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --holo-gradient: linear-gradient(115deg, #00f2fe, #7dd3fc 20%, #a78bfa 40%, #ff7cf5 60%, #00f2fe 80%, #4ade80 100%);
+            --holo-soft: linear-gradient(115deg, rgba(0,242,254,0.22), rgba(167,139,250,0.18) 40%, rgba(255,124,245,0.22) 70%, rgba(74,222,128,0.18));
+            --shadow-holo: 0 8px 32px rgba(0,0,0,0.45), 0 0 24px rgba(0,242,254,0.10), 0 0 48px rgba(255,124,245,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            background-image:
+                radial-gradient(circle at 10% 12%, rgba(14, 165, 233, 0.16) 0%, transparent 42%),
+                radial-gradient(circle at 88% 18%, rgba(255,124,245,0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.10) 0%, transparent 52%),
+                radial-gradient(circle at 50% 50%, rgba(139,92,246,0.08) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 1.5rem 1rem 3rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle holographic cyber-grid overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 242, 254, 0.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.055) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(180deg, black 0%, rgba(0,0,0,0.55) 68%, transparent 100%);
+            -webkit-mask-image: linear-gradient(180deg, black 0%, rgba(0,0,0,0.55) 68%, transparent 100%);
+        }
+
+        /* Floating realistic light orbs for depth */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -10%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(420px 320px at 12% 8%, rgba(0,242,254,0.14), transparent 70%),
+                radial-gradient(520px 380px at 88% 22%, rgba(255,124,245,0.13), transparent 70%),
+                radial-gradient(560px 420px at 50% 100%, rgba(74,222,128,0.10), transparent 70%);
+            filter: blur(2px);
+        }
+
+        body > * { position: relative; z-index: 1; }
+
+        /* Holographic title shimmer (matches wifi page) */
+        .holo-title {
+            background: linear-gradient(100deg, #fff 10%, #a5f3fc 28%, #c4b5fd 45%, #ff7cf5 62%, #a5f3fc 78%, #fff 95%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-text-flow 6s linear infinite;
+            filter: drop-shadow(0 2px 14px rgba(0, 242, 254, 0.3));
+        }
+
+        @keyframes holo-text-flow {
+            0% { background-position: 0% center; }
+            100% { background-position: 220% center; }
+        }
+
+        /* Holographic card border + sheen */
+        .holo-card { position: relative; overflow: hidden; }
+        .holo-card::after {
+            content: '';
+            position: absolute; inset: 0; border-radius: inherit;
+            background: linear-gradient(115deg, transparent 30%, rgba(0,242,254,0.14) 45%, rgba(255,124,245,0.14) 52%, transparent 65%);
+            background-size: 250% 250%;
+            opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
+        }
+        .holo-card:hover::after { opacity: 1; animation: holo-sheen 1.6s linear infinite; }
+        .holo-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+            background: var(--holo-gradient); background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
+            animation: holo-bg-pan 4s linear infinite;
+        }
+        .holo-card:hover::before { opacity: 1; }
+        @keyframes holo-sheen {
+            0% { background-position: 0 0, 0% 20%; }
+            50% { background-position: 0 0, 100% 80%; }
+            100% { background-position: 0 0, 0% 20%; }
+        }
+        @keyframes holo-bg-pan { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* Top Nav & Toggles */
+        .top-nav {
+            max-width: 1240px;
+            margin: 0 auto 1rem auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(21,32,58,0.92), rgba(10,18,36,0.88));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-holo);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 0.8rem 1.4rem;
+            border-radius: 16px;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .top-nav::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 8%;
+            right: 8%;
+            height: 1px;
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            animation: holo-bg-pan 6s linear infinite;
+            opacity: 0.9;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .portal-switch {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .switch-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .switch-btn.active {
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            color: #030712;
+            border-color: transparent;
+            box-shadow: 0 0 18px rgba(0,242,254,0.35);
+        }
+
+        /* Secondary Page Navigation Bar */
+        .nav-container {
+            max-width: 1240px;
+            margin: 0 auto 1rem auto;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            background: linear-gradient(180deg, rgba(21,32,58,0.72), rgba(10,18,36,0.72));
+            box-shadow: var(--shadow-holo);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--neon-blue);
+            background: rgba(14, 165, 233, 0.1);
+        }
+
+        .nav-btn.red {
+            border-color: rgba(244, 63, 94, 0.3);
+            color: #f43f5e;
+        }
+
+        .nav-btn.red:hover {
+            background: rgba(244, 63, 94, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin: 0 auto 1.4rem auto;
+            max-width: 1240px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            background: linear-gradient(100deg, #fff 10%, #a5f3fc 28%, #c4b5fd 45%, #ff7cf5 62%, #a5f3fc 78%, #fff 95%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-text-flow 6s linear infinite;
+            filter: drop-shadow(0 2px 14px rgba(0, 242, 254, 0.3));
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* Compact Wi-Fi Hub Integration Section */
+        .wifi-hub-container {
+            max-width: 1240px;
+            margin: 0 auto 1rem auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .wifi-compact-card {
+            background: linear-gradient(180deg, rgba(21,32,58,0.92), rgba(10,18,36,0.88));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-holo);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Live Activity Bar */
+        .live-bar {
+            max-width: 1240px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(180deg, rgba(21,32,58,0.92), rgba(10,18,36,0.88));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-holo);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .live-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .live-stats span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Controls */
+        .hub-controls {
+            max-width: 1240px;
+            margin: 0 auto 1.2rem auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: linear-gradient(180deg, rgba(21,32,58,0.78), rgba(10,18,36,0.78));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 0.85rem 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            color: #030712;
+            border-color: transparent;
+            box-shadow: 0 0 18px rgba(0,242,254,0.35);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            color: var(--text-main);
+            font-family: inherit;
+            width: 240px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: var(--neon-blue);
+        }
+
+        /* Views Container */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: grid;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+            gap: 1.4rem;
+            align-items: stretch;
+            align-content: start;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 1020px) {
+            .container {
+                grid-template-columns: minmax(0,1fr);
+            }
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        .section-card {
+            background: linear-gradient(180deg, rgba(21,32,58,0.96), rgba(9,15,32,0.97));
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(56,189,248,0.22);
+            border-radius: 20px;
+            padding: 1.4rem;
+            box-shadow: 0 10px 36px rgba(0,0,0,0.5), 0 0 28px rgba(0,242,254,0.08), inset 0 1px 0 rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 6%;
+            right: 6%;
+            width: auto;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--holo-gradient);
+            background-size: 220% auto;
+            animation: holo-bg-pan 5s linear infinite;
+            opacity: 0.95;
+        }
+
+        .section-card.bitds {
+            border-color: rgba(255,124,245,0.30);
+            box-shadow: 0 10px 36px rgba(0,0,0,0.5), 0 0 28px rgba(255,124,245,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            color: #ffffff;
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .badge-bureau {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--neon-green);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .badge-bitds {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--cyber-red);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+        }
+
+        .job-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-content: start;
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .job-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018));
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 16px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 6px 18px rgba(0,0,0,0.32);
+            padding: 0.85rem 0.95rem;
+            display: grid;
+            grid-template-columns: 58px minmax(0,1fr) auto;
+            align-items: center;
+            gap: 0.9rem;
+            min-height: 96px;
+            width: 100%;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .job-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            border-radius: 999px;
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .job-item::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(110deg, transparent 40%, rgba(0,242,254,0.12) 52%, rgba(255,124,245,0.12) 60%, transparent 72%);
+            background-size: 250% 250%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .job-item:hover::after {
+            opacity: 1;
+            animation: holo-sheen 1.8s linear infinite;
+        }
+
+        .job-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0,242,254,0.55);
+            background: linear-gradient(180deg, rgba(0,242,254,0.10), rgba(255,124,245,0.06));
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 22px rgba(0,242,254,0.22), 0 0 42px rgba(255,124,245,0.12);
+        }
+
+        .job-img {
+            width: 58px;
+            height: 58px;
+            min-width: 58px;
+            min-height: 58px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 1px solid rgba(0,242,254,0.35);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 16px rgba(0,242,254,0.25);
+            background: #0b1226;
+            display: block;
+        }
+
+        .job-info {
+            flex-grow: 1;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .job-info h3 {
+            font-size: 0.96rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #ffffff;
+            margin-bottom: 0.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .job-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 0.45rem;
+            min-width: 92px;
+            flex-shrink: 0;
+        }
+
+        .job-type {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .skilled {
+            background: rgba(0, 242, 254, 0.12);
+            color: #a5f3fc;
+            border: 1px solid rgba(0, 242, 254, 0.30);
+        }
+
+        .casual {
+            background: rgba(234, 179, 8, 0.12);
+            color: #fde68a;
+            border: 1px solid rgba(250, 204, 21, 0.30);
+        }
+
+        .apply-btn {
+            background: linear-gradient(135deg, rgba(0,242,254,0.18), rgba(16,185,129,0.18));
+            border: 1px solid rgba(0,242,254,0.45);
+            color: #d9fbff;
+            padding: 0.42rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 14px rgba(0,242,254,0.22);
+            white-space: nowrap;
+        }
+
+        .apply-btn:hover {
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            color: #030712;
+            border-color: transparent;
+            box-shadow: 0 0 22px rgba(255,124,245,0.35);
+        }
+
+        /* Forms & Admin Dashboard */
+        .form-card-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(21,32,58,0.96), rgba(9,15,32,0.97));
+            border: 1px solid rgba(56,189,248,0.22);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-holo);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-card-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 6%;
+            right: 6%;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--holo-gradient);
+            background-size: 220% auto;
+            animation: holo-bg-pan 5s linear infinite;
+            opacity: 0.95;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(3, 7, 18, 0.52);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .form-control:focus {
+            border-color: rgba(0,242,254,0.65);
+            box-shadow: 0 0 0 3px rgba(0,242,254,0.12), 0 0 18px rgba(0,242,254,0.18);
+        }
+
+        .action-btn {
+            width: 100%;
+            background: var(--holo-gradient);
+            background-size: 220% auto;
+            border: none;
+            color: #030712;
+            padding: 0.85rem;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            box-shadow: 0 0 22px rgba(0,242,254,0.28);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+            box-shadow: 0 0 30px rgba(255,124,245,0.30);
+        }
+
+        /* Admin Metric Cards */
+        .admin-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .metric-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+            border-radius: 16px;
+            padding: 1.1rem;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .metric-card h4 {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card .metric-val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--neon-blue);
+        }
+
+        /* Transaction Table */
+        .tx-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .tx-table th, .tx-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .tx-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .tx-status-paid {
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-card {
+            background: linear-gradient(180deg, rgba(21,32,58,0.98), rgba(9,15,32,0.98));
+            border: 1px solid rgba(0,242,254,0.28);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 440px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.65), 0 0 34px rgba(0,242,254,0.16);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .modal-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 8%;
+            right: 8%;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--holo-gradient);
+            opacity: 0.95;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .modal-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .modal-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.6), rgba(2, 6, 23, 0.95));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 22px 18px;
+            box-shadow: 0 0 24px rgba(0, 242, 254, 0.10), 0 18px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            animation: holo-bg-pan 5s linear infinite;
+            opacity: 0.9;
+        }
+
+        footer .foot-glow {
+            background: var(--holo-gradient);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-text-flow 5s linear infinite;
+            font-weight: 800;
+        }
+
+        /* Animated stat numbers */
+        .live-stats span, .metric-val, #talentCountDisplay, #adminTalentCount {
+            background: linear-gradient(100deg, #fff, #a5f3fc 40%, #ff7cf5 65%, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Mobile fine-tuning */
+        @media (max-width: 700px) {
+            body { padding: 1rem 0.6rem 2rem; overflow-x: hidden; }
+            .top-nav { padding: 0.65rem 0.9rem; }
+            .live-bar { padding: 0.7rem 1rem; }
+            .live-stats { gap: 0.9rem; flex-wrap: wrap; font-size: 0.82rem; }
+            .hub-controls { gap: 0.7rem; padding: 0.7rem 0.8rem; }
+            .search-box { width: 100%; box-sizing: border-box; }
+            .section-card { padding: 1rem; border-radius: 16px; }
+            .job-item { grid-template-columns: 48px minmax(0,1fr); }
+            .job-img { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+            .job-meta { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; min-width: 0; }
+            .job-info h3, .job-info p { white-space: normal; overflow: visible; text-overflow: clip; }
+            header h1 { font-size: 1.6rem; }
+            footer { margin: 2rem 0 0; font-size: 0.78rem; }
+            .form-card-wrapper { padding: 1.25rem; }
+        }
+
+        /* ===== UNIFORM EQUAL-HEIGHT HUBS + FULL-FIT HOLOGRAPHIC FINISH ===== */
+        body > .top-nav, body > .nav-container, body > .wifi-hub-container,
+        body > header, body > #seekerView, body > #employerView,
+        body > #financeView, body > #adminView, body > footer {
+            max-width: 1240px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #seekerView.active .container,
+        #employerView.active .container,
+        #financeView.active .container,
+        #adminView.active .container {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+            gap: 1.4rem;
+            align-items: stretch;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #seekerView.active .container > .section-card,
+        #employerView.active .container > .section-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 560px;
+        }
+        #seekerView.active .container > .section-card .job-grid,
+        #employerView.active .container > .section-card .job-grid {
+            flex: 1;
+            align-content: start;
+        }
+        .hub-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0.28rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(0,242,254,0.35);
+            background: rgba(0,242,254,0.10);
+            color: #a5f3fc;
+            white-space: nowrap;
+        }
+        .hub-count.bitds-count {
+            border-color: rgba(255,124,245,0.38);
+            background: rgba(255,124,245,0.10);
+            color: #ffd6fb;
+        }
+        .hub-count strong { font-size: 0.82rem; }
+        .section-card {
+            background: linear-gradient(180deg, rgba(21,32,58,0.96), rgba(9,15,32,0.97));
+            border: 1px solid rgba(56,189,248,0.22);
+            border-radius: 20px;
+            box-shadow: 0 10px 36px rgba(0,0,0,0.5), 0 0 28px rgba(0,242,254,0.08), inset 0 1px 0 rgba(255,255,255,0.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+        .job-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            align-content: start;
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .job-grid > .job-item { min-height: 100px; }
+        /* Realistic slow holographic movement for key surfaces */
+        .section-card.holo-card::before { opacity: 0.85; }
+        .apply-btn { position: relative; overflow: hidden; }
+        .apply-btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.35) 50%, transparent 65%);
+            transform: translateX(-120%);
+            transition: transform 0.7s ease;
+            pointer-events: none;
+        }
+        .apply-btn:hover::after { transform: translateX(120%); }
+        @media (max-width: 1020px) {
+            #seekerView.active .container { grid-template-columns: 1fr; }
+        }
+        .section-card.bitds {
+            border-color: rgba(255,124,245,0.30);
+            box-shadow: 0 10px 36px rgba(0,0,0,0.5), 0 0 28px rgba(255,124,245,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+        .section-title {
+            padding-bottom: 0.9rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .holo-title, .holo-card::after, .holo-card::before,
+            footer::before, footer .foot-glow { animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation with Portal Toggles -->
+    <div class="top-nav">
+        <div class="brand-logo"><img src="/assets/Bureau%20logo.png" alt="Bureau logo" style="height:26px;width:auto;vertical-align:middle;margin-right:8px;">BUREAU JOBS HUB</div>
+        <div class="portal-switch">
+            <button class="switch-btn active" onclick="switchView('seeker', this)">Find Work</button>
+            <button class="switch-btn" onclick="switchView('employer', this)">Post a Job</button>
+        </div>
+    </div>
+
+    <!-- Secondary Navigation Menu Linking All Pages -->
+    <div class="nav-container">
+        <a href="/index.html" class="nav-btn">Home</a>
+        <a href="/job-seeker.html" class="nav-btn">Job Seeker Registration</a>
+        <a href="/employer.html" class="nav-btn">Employer Registration</a>
+        <a href="/wifi.html" class="nav-btn">GET WI-FI</a>
+    </div>
+
+    <header>
+        <h1 id="headerTitle" class="holo-title">Find Work in Uganda</h1>
+        <p id="headerSubtitle">Verified employers, clear roles, and fast applications</p>
+    </header>
+
+    <!-- 1. SEEKER HUB VIEW -->
+    <div id="seekerView" class="view-section active">
+        <div class="live-bar">
+            <div class="live-status">
+                <div class="pulse-dot"></div>
+                LIVE JOBS IN KAMPALA & UP-COUNTRY
+            </div>
+            <div class="live-stats">
+                <div>Verified Employers: <span id="talentCountDisplay">120+</span></div>
+                <div>New roles weekly: <span>Updated every Monday</span></div>
+            </div>
+        </div>
+
+        <div class="hub-controls">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterJobs('all')">All Roles</button>
+                <button class="filter-btn" onclick="filterJobs('skilled')">Skilled</button>
+                <button class="filter-btn" onclick="filterJobs('casual')">Casual</button>
+            </div>
+            <input type="text" id="searchInput" class="search-box" placeholder="Search by title, skill, or district..." onkeyup="searchJobs()">
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1rem;">Applying is free. A UGX 20,000 verification fee applies once, only after an employer shortlists you.</p>
+
+        <div class="container">
+            <div class="section-card">
+                <div class="section-title">
+                    Bureau Jobs
+                    <span style="display:inline-flex;gap:0.45rem;align-items:center;flex-wrap:wrap;">
+                        <span class="hub-count" id="bureauHubCount"><strong>4</strong> live roles</span>
+                        <span class="badge badge-bureau">Operations Hub</span>
+                    </span>
+                </div>
+                <div class="job-grid" id="bureauJobList">
+                    <div class="job-item" data-type="skilled" data-title="hotel manager">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=150&q=80" alt="Hotel Manager" class="job-img">
+                        <div class="job-info">
+                            <h3>Hotel Manager</h3>
+                            <p>Global Hospitality Hub • UGX 1,800,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type skilled">Skilled</span>
+                            <button class="apply-btn" onclick="openAuthModal('Hotel Manager', 50000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div class="job-item" data-type="skilled" data-title="front desk attendant">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Front Desk" class="job-img">
+                        <div class="job-info">
+                            <h3>Front Desk Attendant</h3>
+                            <p>Cyber Reception • UGX 950,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type skilled">Skilled</span>
+                            <button class="apply-btn" onclick="openAuthModal('Front Desk Attendant', 35000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div class="job-item" data-type="casual" data-title="waiters waitresses">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=150&q=80" alt="Waiters" class="job-img">
+                        <div class="job-info">
+                            <h3>Waiters & Waitresses</h3>
+                            <p>Virtual Dining Network • UGX 600,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type casual">Casual</span>
+                            <button class="apply-btn" onclick="openAuthModal('Waiters & Waitresses', 20000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div class="job-item" data-type="skilled" data-title="e-learning teachers">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=150&q=80" alt="Teachers" class="job-img">
+                        <div class="job-info">
+                            <h3>E-Learning Teachers</h3>
+                            <p>Global Remote Academy • UGX 1,400,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type skilled">Skilled</span>
+                            <button class="apply-btn" onclick="openAuthModal('E-Learning Teachers', 40000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card bitds">
+                <div class="section-title">
+                    BITDS Section
+                    <span style="display:inline-flex;gap:0.45rem;align-items:center;flex-wrap:wrap;">
+                        <span class="hub-count bitds-count" id="bitdsHubCount"><strong>4</strong> live roles</span>
+                        <span class="badge badge-bitds">Enterprise Hub</span>
+                    </span>
+                </div>
+                <div class="job-grid" id="bitdsJobList">
+                    <div class="job-item" data-type="skilled" data-title="digital device technicians">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&q=80" alt="Tech" class="job-img">
+                        <div class="job-info">
+                            <h3>Digital Device Technicians</h3>
+                            <p>E-Commerce Support • UGX 1,600,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type skilled">Skilled</span>
+                            <button class="apply-btn" onclick="openAuthModal('Digital Device Technicians', 45000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div class="job-item" data-type="casual" data-title="field logistics crew">
+                        <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=150&q=80" alt="Logistics" class="job-img">
+                        <div class="job-info">
+                            <h3>Field Logistics Crew</h3>
+                            <p>Infrastructure Hub • UGX 750,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type casual">Casual</span>
+                            <button class="apply-btn" onclick="openAuthModal('Field Logistics Crew', 25000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div class="job-item" data-type="skilled" data-title="client success leads">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=150&q=80" alt="Client Success" class="job-img">
+                        <div class="job-info">
+                            <h3>Client Success Leads</h3>
+                            <p>Telecom & Billing • UGX 2,100,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type skilled">Skilled</span>
+                            <button class="apply-btn" onclick="openAuthModal('Client Success Leads', 50000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div class="job-item" data-type="casual" data-title="general assistants">
+                        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=150&q=80" alt="Assistants" class="job-img">
+                        <div class="job-info">
+                            <h3>General Assistants</h3>
+                            <p>Property Support • UGX 550,000 / mo</p>
+                        </div>
+                        <div class="job-meta">
+                            <span class="job-type casual">Casual</span>
+                            <button class="apply-btn" onclick="openAuthModal('General Assistants', 20000)">Apply &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. EMPLOYER POST VIEW -->
+    <div id="employerView" class="view-section">
+        <div class="form-card-wrapper">
+            <div class="section-title" style="margin-bottom: 1rem;">
+                Post a Virtual Vacancy
+                <span class="badge badge-bureau">East Africa Portal</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Directly list openings for remote candidates based in Uganda.</p>
+            
+            <form onsubmit="handleEmployerPost(event)">
+                <div class="form-group">
+                    <label>Company / Organization Name</label>
+                    <input type="text" id="empCompany" class="form-control" placeholder="e.g., Kampala Digital Solutions" required>
+                </div>
+                <div class="form-group">
+                    <label>Job Position Title</label>
+                    <input type="text" id="empTitle" class="form-control" placeholder="e.g., Remote Customer Support Specialist" required>
+                </div>
+                <div class="form-group">
+                    <label>Category Type</label>
+                    <select id="empType" class="form-control">
+                        <option value="skilled">Skilled Professional</option>
+                        <option value="casual">Flexible / Casual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Salary Offer (UGX)</label>
+                    <input type="text" id="empSalary" class="form-control" placeholder="e.g., UGX 1,200,000" required>
+                </div>
+                <div class="form-group">
+                    <label>Contact Phone (MTN/Airtel Code +256)</label>
+                    <input type="text" id="empContact" class="form-control" placeholder="+256 700 000000" required>
+                </div>
+                <button type="submit" class="action-btn">Publish Opening Instantly</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. REMOTE PAY & ESCROW GATEWAY VIEW -->
+    <div id="financeView" class="view-section">
+        <div class="form-card-wrapper">
+            <div class="section-title" style="margin-bottom: 1rem;">
+                Remote Pay & Virtual Assistant Payroll
+                <span class="badge badge-bitds">UGX Escrow Node</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Manage remote compensation, client registration fees, and virtual assistant disbursement.</p>
+            
+            <form onsubmit="handleFinanceAction(event)">
+                <div class="form-group">
+                    <label>Transaction Type</label>
+                    <select id="txType" class="form-control">
+                        <option value="Registration Fee">Client Registration Fee Collection</option>
+                        <option value="VA Payout">Remote Virtual Assistant Payout</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Recipient / Client Name & Phone</label>
+                    <input type="text" id="txName" class="form-control" placeholder="e.g., Okello John (+256 770 000000)" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount (UGX)</label>
+                    <input type="number" id="txAmount" class="form-control" placeholder="e.g., 50000" required>
+                </div>
+                <button type="submit" class="action-btn" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); color: #030712;">Process Mobile Money Transfer</button>
+            </form>
+
+            <div style="margin-top: 2rem;">
+                <h4 style="font-size: 1rem; color: #ffffff; margin-bottom: 0.5rem;">Recent Ledger Activity</h4>
+                <table class="tx-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Amount (UGX)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ledgerTableBody">
+                        <tr>
+                            <td>Registration Fee</td>
+                            <td>Sarah Namubiru (+256 701...)</td>
+                            <td>UGX 35,000</td>
+                            <td class="tx-status-paid">Verified / Received</td>
+                        </tr>
+                        <tr>
+                            <td>VA Payout</td>
+                            <td>David Mukasa (Tech Assistant)</td>
+                            <td>UGX 450,000</td>
+                            <td class="tx-status-paid">Disbursed (MTN MoMo)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. ADMIN PORTAL VIEW -->
+    <div id="adminView" class="view-section">
+        <div class="form-card-wrapper" style="max-width: 900px;">
+            <div class="section-title" style="margin-bottom: 1.5rem;">
+                Bureau Executive Admin Console
+                <span class="badge badge-bitds" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e;">Restricted Access</span>
+            </div>
+
+            <div class="admin-metrics">
+                <div class="metric-card">
+                    <h4>Total Verified Talent</h4>
+                    <div class="metric-val" id="adminTalentCount">2,845</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Active Network Nodes</h4>
+                    <div class="metric-val">Kampala / Entebbe</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Escrow Gateway</h4>
+                    <div class="metric-val" style="color: var(--neon-green);">Operational</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <h4 style="font-size: 1rem; color: #ffffff; margin-bottom: 0.5rem;">System Controls & Data Management</h4>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Perform emergency resets or review system states across local storage.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="resetSystemData()" style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.4); color: #f43f5e; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Reset Storage & Ledger</button>
+                    <button onclick="alert('Admin Node connection secure. All SSL certificates valid.')" style="background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.4); color: var(--neon-blue); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Run Node Health Check</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h4 style="font-size: 1rem; color: #ffffff; margin-bottom: 0.5rem;">Complete Transaction Audit Trail</h4>
+                <table class="tx-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Amount (UGX)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminLedgerBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANDIDATE AUTHENTICATION & FEE MODAL -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            <h3>Candidate Verification & Fee</h3>
+            <p id="modalJobSubtitle">Verify your mobile connection to submit application.</p>
+            
+            <form onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label>Full Legal Name</label>
+                    <input type="text" id="appName" class="form-control" placeholder="e.g., Namubiru Sarah" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number (MTN / Airtel)</label>
+                    <input type="text" id="appPhone" class="form-control" placeholder="+256 700 000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Required Processing / Registration Fee (UGX)</label>
+                    <input type="text" id="appFeeDisplay" class="form-control" disabled style="background: rgba(255,255,255,0.01); color: var(--neon-green); font-weight:700;">
+                </div>
+                <button type="submit" class="action-btn" style="background: var(--neon-green); color: #030712; margin-top: 0.5rem;">Pay via Mobile Money & Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 <span class="foot-glow">Bureau of Business and Credit</span>. Empowering Ugandan Digital Employment.
+    </footer>
+
+    <script>
+        // Animated stats counter — counts up on load for a lively command-center feel
+        function animateCount(el, target, duration) {
+            if (!el) return;
+            const start = 0;
+            const startTime = performance.now();
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) { el.innerText = target.toLocaleString(); return; }
+            function tick(now) {
+                const p = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.innerText = Math.floor(start + (target - start) * eased).toLocaleString();
+                if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+        let appData = JSON.parse(localStorage.getItem('bureau_db')) || {
+            talentCount: 2845,
+            customJobs: [],
+            transactions: [
+                { type: 'Registration Fee', details: 'Sarah Namubiru (+256 701...)', amount: '35,000', status: 'Verified / Received' },
+                { type: 'VA Payout', details: 'David Mukasa (Tech Assistant)', amount: '450,000', status: 'Disbursed (MTN MoMo)' }
+            ]
+        };
+
+        function syncStorage() {
+            localStorage.setItem('bureau_db', JSON.stringify(appData));
+            document.getElementById('talentCountDisplay').innerText = (appData.talentCount).toLocaleString();
+            const adminTalent = document.getElementById('adminTalentCount');
+            if(adminTalent) adminTalent.innerText = (appData.talentCount).toLocaleString();
+        }
+
+        function switchView(viewName, btn) {
+            document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+
+            const title = document.getElementById('headerTitle');
+            const subtitle = document.getElementById('headerSubtitle');
+
+            if (viewName === 'seeker') {
+                document.getElementById('seekerView').classList.add('active');
+                title.innerText = "Uganda Virtual Employment Hub";
+                subtitle.innerText = "Next-Gen Staffing, Remote Talent & Enterprise Connectivity";
+            } else if (viewName === 'employer') {
+                document.getElementById('employerView').classList.add('active');
+                title.innerText = "Employer Recruitment Portal";
+                subtitle.innerText = "Direct Talent Sourcing for East African Enterprises";
+            } else if (viewName === 'finance') {
+                document.getElementById('financeView').classList.add('active');
+                title.innerText = "Remote Pay & Escrow Gateway";
+                subtitle.innerText = "Seamless Cross-Border & Local Mobile Money Settlements";
+                renderLedger();
+            } else if (viewName === 'admin') {
+                document.getElementById('adminView').classList.add('active');
+                title.innerText = "Executive Administration Portal";
+                subtitle.innerText = "Secure Node Management & Platform Oversight";
+                renderAdminLedger();
+            }
+        }
+
+        function updateHubCounts() {
+            const bureauTotal = document.querySelectorAll('#bureauJobList .job-item').length;
+            const bitdsTotal = document.querySelectorAll('#bitdsJobList .job-item').length;
+            const bureauVisible = Array.from(document.querySelectorAll('#bureauJobList .job-item')).filter(el => el.style.display !== 'none').length;
+            const bitdsVisible = Array.from(document.querySelectorAll('#bitdsJobList .job-item')).filter(el => el.style.display !== 'none').length;
+            const bureauEl = document.getElementById('bureauHubCount');
+            const bitdsEl = document.getElementById('bitdsHubCount');
+            if (bureauEl) bureauEl.innerHTML = '<strong>' + bureauVisible + '</strong> of ' + bureauTotal + ' roles';
+            if (bitdsEl) bitdsEl.innerHTML = '<strong>' + bitdsVisible + '</strong> of ' + bitdsTotal + ' roles';
+        }
+
+        function filterJobs(type) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.job-item').forEach(item => {
+                const matches = (type === 'all' || item.getAttribute('data-type') === type);
+                item.style.display = matches ? 'grid' : 'none';
+            });
+            updateHubCounts();
+        }
+
+        function searchJobs() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.job-item').forEach(item => {
+                const title = item.getAttribute('data-title');
+                const text = item.innerText.toLowerCase();
+                item.style.display = (title.includes(query) || text.includes(query)) ? 'grid' : 'none';
+            });
+            updateHubCounts();
+        }
+
+        let activeJobTitle = "";
+        let activeJobFee = 0;
+
+        function openAuthModal(jobTitle, feeAmt) {
+            activeJobTitle = jobTitle;
+            activeJobFee = feeAmt;
+            document.getElementById('modalJobSubtitle').innerText = `Applying for: ${jobTitle}.`;
+            document.getElementById('appFeeDisplay').value = `UGX ${feeAmt.toLocaleString()}`;
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function submitApplication(event) {
+            event.preventDefault();
+            const name = document.getElementById('appName').value;
+            const phone = document.getElementById('appPhone').value;
+
+            appData.transactions.unshift({
+                type: 'Registration Fee',
+                details: `${name} (${phone})`,
+                amount: activeJobFee.toLocaleString(),
+                status: 'Verified via MoMo'
+            });
+            appData.talentCount += 1;
+            syncStorage();
+
+            alert(`Success! Payment of UGX ${activeJobFee.toLocaleString()} received via Mobile Money gateway. Your profile is verified for the ${activeJobTitle} role.`);
+            closeAuthModal();
+            event.target.reset();
+        }
+
+        function handleEmployerPost(event) {
+            event.preventDefault();
+            const comp = document.getElementById('empCompany').value;
+            const title = document.getElementById('empTitle').value;
+            const type = document.getElementById('empType').value;
+            const salary = document.getElementById('empSalary').value;
+
+            const listId = (type === 'skilled') ? 'bureauJobList' : 'bitdsJobList';
+            const newItem = document.createElement('div');
+            newItem.className = 'job-item';
+            newItem.setAttribute('data-type', type);
+            newItem.setAttribute('data-title', title.toLowerCase());
+            newItem.innerHTML = `
+                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=150&q=80" alt="Job" class="job-img">
+                <div class="job-info">
+                    <h3>${title}</h3>
+                    <p>${comp} • ${salary} / mo</p>
+                </div>
+                <div class="job-meta">
+                    <span class="job-type ${type}">${type === 'skilled' ? 'Skilled' : 'Casual'}</span>
+                    <button class="apply-btn" onclick="openAuthModal('${title}', 30000)">Apply &rarr;</button>
+                </div>
+            `;
+            document.getElementById(listId).prepend(newItem);
+
+            appData.talentCount += 3;
+            syncStorage();
+            updateHubCounts();
+
+            alert("Vacancy successfully published to the Live Uganda Hub network!");
+            event.target.reset();
+            switchView('seeker', document.querySelectorAll('.switch-btn')[0]);
+        }
+
+        function handleFinanceAction(event) {
+            event.preventDefault();
+            const type = document.getElementById('txType').value;
+            const name = document.getElementById('txName').value;
+            const amount = Number(document.getElementById('txAmount').value).toLocaleString();
+
+            appData.transactions.unshift({
+                type: type,
+                details: name,
+                amount: amount,
+                status: type === 'VA Payout' ? 'Disbursed (MTN/Airtel)' : 'Verified / Received'
+            });
+            syncStorage();
+            renderLedger();
+
+            alert(`Transaction of UGX ${amount} processed successfully through the regional payment gateway.`);
+            event.target.reset();
+        }
+
+        function renderLedger() {
+            const tbody = document.getElementById('ledgerTableBody');
+            tbody.innerHTML = '';
+            appData.transactions.forEach(tx => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tx.type}</td>
+                    <td>${tx.details}</td>
+                    <td>UGX ${tx.amount}</td>
+                    <td class="tx-status-paid">${tx.status}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderAdminLedger() {
+            const tbody = document.getElementById('adminLedgerBody');
+            tbody.innerHTML = '';
+            appData.transactions.forEach(tx => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tx.type}</td>
+                    <td>${tx.details}</td>
+                    <td>UGX ${tx.amount}</td>
+                    <td class="tx-status-paid">${tx.status}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function resetSystemData() {
+            if(confirm("Are you sure you want to reset all platform mock data?")) {
+                localStorage.removeItem('bureau_db');
+                location.reload();
+            }
+        }
+
+        syncStorage();
+        // Animate talent counters on first load
+        animateCount(document.getElementById('talentCountDisplay'), appData.talentCount, 1400);
+        animateCount(document.getElementById('adminTalentCount'), appData.talentCount, 1400);
+        try { updateHubCounts(); } catch (e) {}
+        // Holographic touch on cards
+        document.querySelectorAll('.section-card, .wifi-compact-card, .live-bar, .metric-card, .top-nav').forEach(el => el.classList.add('holo-card'));
+    </script>
+</body>
+</html>
