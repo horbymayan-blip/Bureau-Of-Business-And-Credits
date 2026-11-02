@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+# Public pages
+Allow: /index.html
+Allow: /wifi.html
+Allow: /job-seeker.html
+Allow: /employer.html
+Allow: /movies
+Allow: /premium
+Allow: /jobs.html
+Allow: /loan-apply.html
+Allow: /credit.html
+Allow: /bitds.html
+Allow: /privacy.html
+
+# Admin and auth pages - not for indexing
+Disallow: /admin.html
+Disallow: /movies-admin.html
+Disallow: /login.html
+Disallow: /account.html
+Disallow: /dashboard.html
+Disallow: /employer-dashboard.html
+Disallow: /job-seeker-dashboard.html
+Disallow: /forgot-password.html
+Disallow: /reset-password.html
+Disallow: /verify.html
+Disallow: /play.html
+
+# API endpoints
+Disallow: /api/
+
+Sitemap: https://bureau-of-business-and-credits.onrender.com/sitemap.xml
