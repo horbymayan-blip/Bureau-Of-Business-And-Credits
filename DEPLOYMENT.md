@@ -29,7 +29,7 @@ Files added for you:
    cp .env.production.example .env.production
    nano .env.production
    # set ADMIN_EMAIL, 12+ char ADMIN_PASSWORD, CORS_ORIGIN=https://your-domain.example,
-   # MOMO_CALLBACK_URL=https://your-domain.example/api/payment/callback, MOMO_CALLBACK_SECRET, MoMo keys
+   # MOMO_CALLBACK_URL=https://your-domain.example/api/payment/callback, MoMo keys
    ```
 5. Launch:
    ```bash
@@ -56,10 +56,11 @@ Set production values in the deployment secret manager, not in source control:
 - `NODE_ENV=production`
 - `ADMIN_EMAIL` and a 12+ character `ADMIN_PASSWORD`
 - `MOMO_PRIMARY_KEY`, `MOMO_API_USER`, `MOMO_API_KEY`
-- `MOMO_CALLBACK_SECRET`
 - `MOMO_CALLBACK_URL=https://your-domain.example/api/payment/callback`
 - `CORS_ORIGIN=https://your-domain.example`
 - `WIFI_PROVISIONING_MODE=mock` until a hotspot provider is ready
+
+MTN callbacks must use a public HTTPS URL whose host is registered on the MTN API user. The callback payload is only a notification; the server verifies payment status with MTN before granting Wi-Fi access. No callback-signature secret is required.
 
 For MikroTik later, use `WIFI_PROVISIONING_MODE=mikrotik-rest` and configure the HTTPS RouterOS URL and restricted API credentials.
 

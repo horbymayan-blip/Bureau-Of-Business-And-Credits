@@ -38,12 +38,13 @@ MOMO_PRIMARY_KEY=<from .env>
 MOMO_API_USER=<from .env>
 MOMO_API_KEY=<from .env>
 MOMO_CALLBACK_URL=https://YOUR-SERVICE.onrender.com/api/payment/callback
-MOMO_CALLBACK_SECRET=<real secret, server.js throws in production if placeholder>
 WIFI_PROVISIONING_MODE=mock
 NOTIFICATION_CHANNEL=log
 ```
 3. Deploy, watch Logs for `Bureau portal is running on port 3000`
 4. Test: `https://YOUR-SERVICE.onrender.com/health`, `/`, `/movies`, `/premium`
+
+Set `MOMO_CALLBACK_URL` to the service's public HTTPS URL ending in `/api/payment/callback`, and ensure the host matches the callback host registered on the MTN API user. The server verifies each callback with MTN's payment-status API before applying it, so no callback-signature secret is required. Local sandbox checkout may leave the callback URL unset and rely on polling.
 
 ## 4. Persistence warning
 Render free filesystem is ephemeral - `data/*.sqlite` + `public/assets/movies/` reset on redeploy.

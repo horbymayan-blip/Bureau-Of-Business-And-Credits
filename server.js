@@ -38,9 +38,6 @@ const MOMO_PRIMARY_KEY = process.env.MOMO_PRIMARY_KEY;
 const MOMO_API_USER = process.env.MOMO_API_USER;
 const MOMO_API_KEY = process.env.MOMO_API_KEY;
 const MOMO_CALLBACK_URL = process.env.MOMO_CALLBACK_URL || 'http://localhost:3000/api/payment/callback';
-const RAW_CALLBACK_SECRET = process.env.MOMO_CALLBACK_SECRET || '';
-// Treat example placeholder values as "not configured" so sandbox callbacks are not rejected.
-const MOMO_CALLBACK_SECRET = /replace-with|example|changeme|placeholder/i.test(RAW_CALLBACK_SECRET) ? '' : RAW_CALLBACK_SECRET;
 const PAYMENT_STATUSES = new Set(['PENDING', 'SUCCESSFUL', 'FAILED', 'REJECTED', 'TIMEOUT', 'CANCELLED']);
 const WIFI_PACKAGES = new Map([
   ['1 Hour', 200],
@@ -217,7 +214,7 @@ function seedAdminUser() {
 
 function validateProductionConfiguration() {
   if (process.env.NODE_ENV !== 'production') return;
-  const required = ['ADMIN_EMAIL', 'ADMIN_PASSWORD', 'MOMO_PRIMARY_KEY', 'MOMO_API_USER', 'MOMO_API_KEY', 'MOMO_CALLBACK_SECRET'];
+  const required = ['ADMIN_EMAIL', 'ADMIN_PASSWORD', 'MOMO_PRIMARY_KEY', 'MOMO_API_USER', 'MOMO_API_KEY'];
   const missing = required.filter((name) => !process.env[name] || /replace-with|example|changeme|placeholder/i.test(String(process.env[name])));
   if (missing.length) throw new Error(`Missing production configuration: ${missing.join(', ')}`);
   if (!/^https:\/\//i.test(MOMO_CALLBACK_URL)) throw new Error('MOMO_CALLBACK_URL must use HTTPS in production.');
@@ -515,15 +512,6 @@ async function applyPaymentResult(payment, status, payload, eventKey) {
   return { applied: true, payment: updatedPayment };
 }
 
-function verifyCallbackSignature(req) {
-  if (!MOMO_CALLBACK_SECRET) return process.env.NODE_ENV !== 'production';
-  const received = String(req.headers['x-momo-signature'] || req.headers['x-callback-signature'] || '');
-  if (!received) return false;
-  const rawBody = req.rawBody ? req.rawBody.toString('utf8') : JSON.stringify(req.body || {});
-  const expected = crypto.createHmac('sha256', MOMO_CALLBACK_SECRET).update(rawBody || '').digest('hex');
-  return received.length === expected.length && crypto.timingSafeEqual(Buffer.from(received), Buffer.from(expected));
-}
-
 app.use(cors(process.env.CORS_ORIGIN ? { origin: process.env.CORS_ORIGIN.split(',').map((s) => s.trim()).filter(Boolean) } : { origin: true }));
 app.use((req, res, next) => {
   // Same-origin portal + API: allow credentials so wifi.html polling works.
@@ -536,12 +524,7 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use(express.json({
-  limit: '32kb',
-  verify: (req, res, buffer) => {
-    if (req.path === '/api/payment/callback') req.rawBody = buffer;
-  }
-}));
+app.use(express.json({ limit: '32kb' }));
 app.use(express.urlencoded({ extended: true }));
 
 const allowedDocumentTypes = new Set(['application/pdf', 'image/jpeg', 'image/png', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']);
@@ -1958,44 +1941,45 @@ app.post('/api/payment/flutterwave/webhook', async (req, res) => {
 });
 
 app.post('/api/payment/callback', async (req, res) => {
-  if (!verifyCallbackSignature(req)) {
-    return res.status(401).json({ success: false, message: 'Callback authentication failed.' });
-  }
-
   const callbackPayload = req.body || {};
-  const { externalId, referenceId, status } = callbackPayload;
+  const callbackData = callbackPayload.data && typeof callbackPayload.data === 'object'
+    ? callbackPayload.data
+    : callbackPayload;
+  const externalId = callbackData.externalId || callbackData.external_id || callbackData.externalID;
+  const referenceId = callbackData.referenceId || callbackData.reference_id || callbackData.referenceid;
+  const status = callbackData.status || callbackData.transactionStatus || callbackData.transaction_status;
   logEvent('payment.callback.received', { referenceId, externalId, status });
 
-  const rawExternalId = externalId || callbackPayload.externalId;
-  const rawReferenceId = referenceId || callbackPayload.referenceId || callbackPayload.referenceid;
-  // MTN Collection callbacks use `externalId` (our BPC-/MOV- id) and `status`
-  // (SUCCESSFUL / FAILED / PENDING / REJECTED / TIMEOUT). Poll the provider
-  // for the authoritative status when only an id is supplied.
-  const normalizedStatus = String(status || callbackPayload.transactionStatus || '').toUpperCase();
-  const record = rawExternalId
-    ? (database.getPaymentByExternalId(rawExternalId) || database.getPayment(rawExternalId))
-    : rawReferenceId
-      ? database.getPayment(rawReferenceId)
+  // MTN callbacks are notifications; confirm every result against its status API.
+  const record = externalId
+    ? (database.getPaymentByExternalId(externalId) || database.getPayment(externalId))
+    : referenceId
+      ? database.getPayment(referenceId)
       : null;
 
   if (!record) {
-    console.warn('Ignored unmatched MoMo callback:', { externalId: rawExternalId, referenceId: rawReferenceId, status });
+    console.warn('Ignored unmatched MoMo callback:', { externalId, referenceId, status });
     return res.status(404).json({ success: false, message: 'Payment reference not found.' });
   }
 
-  let finalStatus = normalizedStatus;
-  if (!finalStatus || finalStatus === 'PENDING') {
-    try {
-      const live = await getPaymentStatus(record.referenceId);
-      finalStatus = String(live?.status || live?.transactionStatus || normalizedStatus || 'PENDING').toUpperCase();
-      Object.assign(callbackPayload, live || {});
-    } catch {
-      finalStatus = normalizedStatus || 'PENDING';
-    }
+  if (record.gateway && record.gateway !== 'mtn') {
+    return res.status(400).json({ success: false, message: 'This callback is not for an MTN MoMo payment.' });
   }
 
-  const eventKey = String(callbackPayload.transactionId || callbackPayload.financialTransactionId || `${record.referenceId}:${finalStatus}`);
-  const result = await applyPaymentResult(record, finalStatus, callbackPayload, `callback:${eventKey}`);
+  let live;
+  try {
+    live = await getPaymentStatus(record.referenceId);
+  } catch (error) {
+    logEvent('payment.callback.reconciliation_failed', {
+      referenceId: record.referenceId,
+      message: error.message
+    });
+    return res.status(502).json({ success: false, message: 'Could not verify the payment with MTN. The callback can be retried.' });
+  }
+
+  const finalStatus = String(live?.status || live?.transactionStatus || 'PENDING').toUpperCase();
+  const eventKey = String(live?.transactionId || live?.financialTransactionId || `${record.referenceId}:${finalStatus}`);
+  const result = await applyPaymentResult(record, finalStatus, live, `callback:${eventKey}`);
   if (!result.applied && result.reason === 'invalid-status-transition') {
     return res.status(409).json({ success: false, message: 'Invalid payment status transition.' });
   }
