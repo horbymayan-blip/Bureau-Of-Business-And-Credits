@@ -12,14 +12,12 @@ services:
         value: 22.17.0
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 3000
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
       - key: CORS_ORIGIN
-        sync: false
+        value: https://bureau-of-business-and-credits.onrender.com
       - key: MOMO_BASE_URL
         value: https://sandbox.momodeveloper.mtn.com
       - key: MOMO_ENVIRONMENT
@@ -33,7 +31,7 @@ services:
       - key: MOMO_API_KEY
         sync: false
       - key: MOMO_CALLBACK_URL
-        sync: false
+        value: https://bureau-of-business-and-credits.onrender.com/api/payment/callback
       - key: MOMO_CALLBACK_SECRET
         sync: false
       - key: WIFI_PROVISIONING_MODE

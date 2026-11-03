@@ -30,20 +30,22 @@ NODE_ENV=production
 NODE_VERSION=22.17.0
 ADMIN_EMAIL=<your admin email>
 ADMIN_PASSWORD=<12+ chars, new strong password>
-CORS_ORIGIN=https://YOUR-SERVICE.onrender.com
+CORS_ORIGIN=https://bureau-of-business-and-credits.onrender.com
 MOMO_BASE_URL=https://sandbox.momodeveloper.mtn.com
 MOMO_ENVIRONMENT=sandbox
 MOMO_CURRENCY=EUR
 MOMO_PRIMARY_KEY=<from .env>
 MOMO_API_USER=<from .env>
 MOMO_API_KEY=<from .env>
-MOMO_CALLBACK_URL=https://YOUR-SERVICE.onrender.com/api/payment/callback
+MOMO_CALLBACK_URL=https://bureau-of-business-and-credits.onrender.com/api/payment/callback
 MOMO_CALLBACK_SECRET=<real secret, server.js throws in production if placeholder>
 WIFI_PROVISIONING_MODE=mock
 NOTIFICATION_CHANNEL=log
 ```
-3. Deploy, watch Logs for `Bureau portal is running on port 3000`
-4. Test: `https://YOUR-SERVICE.onrender.com/health`, `/`, `/movies`, `/premium`
+Do not set `PORT` manually; Render supplies the port and the server listens on `process.env.PORT`.
+The payment callback accepts provider `POST` requests at `/api/payment/callback`; opening that URL in a browser sends `GET` and can correctly return 404. Ensure the MoMo API user is registered with callback host `bureau-of-business-and-credits.onrender.com` (host only); re-provision the API user if its registered host is stale.
+3. Deploy, then test `https://bureau-of-business-and-credits.onrender.com/health`, `/`, `/movies`, `/premium`.
+4. Check Render logs for `Bureau portal is running on port <assigned port>`.
 
 ## 4. Persistence warning
 Render free filesystem is ephemeral - `data/*.sqlite` + `public/assets/movies/` reset on redeploy.
