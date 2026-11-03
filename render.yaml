@@ -33,7 +33,7 @@ services:
       - key: MOMO_API_KEY
         sync: false
       - key: MOMO_CALLBACK_URL
-        sync: false
+        value: https://bureau-of-business-and-credits.onrender.com/api/payment/callback
       - key: WIFI_PROVISIONING_MODE
         value: mock
       - key: NOTIFICATION_CHANNEL
