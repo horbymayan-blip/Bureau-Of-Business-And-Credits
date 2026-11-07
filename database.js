@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { DatabaseSync } = require('node:sqlite');
 
-const dataDirectory = path.join(__dirname, 'data');
+const dataDirectory = path.resolve(process.env.DATA_DIRECTORY || path.join(__dirname, 'data'));
 fs.mkdirSync(dataDirectory, { recursive: true });
 
 const database = new DatabaseSync(path.join(dataDirectory, 'bureau-portal.sqlite'));

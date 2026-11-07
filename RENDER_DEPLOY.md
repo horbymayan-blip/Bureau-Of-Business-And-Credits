@@ -28,6 +28,9 @@ If `Cannot find module` -> install did not finish, rerun bat.
 ```
 NODE_ENV=production
 NODE_VERSION=22.17.0
+DATA_DIRECTORY=/var/data
+MOVIE_UPLOAD_DIR=/var/data/movies
+MOVIE_STORAGE_PERSISTENT=true
 ADMIN_EMAIL=<your admin email>
 ADMIN_PASSWORD=<12+ chars, new strong password>
 CORS_ORIGIN=https://YOUR-SERVICE.onrender.com
@@ -46,7 +49,10 @@ NOTIFICATION_CHANNEL=log
 4. Test: `https://YOUR-SERVICE.onrender.com/health`, `/`, `/movies`, `/premium`
 
 ## 4. Persistence warning
-Render free filesystem is ephemeral - `data/*.sqlite` + `public/assets/movies/` reset on redeploy.
-- Quick fix: Service > Disks > Add 1GB disk mounted at `/opt/render/project/src/data`
-- Real fix for movies: VPS + Docker + Caddy, see `DEPLOYMENT.md` Option A.
+Render's local filesystem is ephemeral. Uploaded movies and SQLite data can disappear on deploy/restart unless stored on a persistent disk.
+- In the Render service dashboard, add a persistent disk mounted at `/var/data` (persistent disks may require a paid plan).
+- Set `DATA_DIRECTORY=/var/data`, `MOVIE_UPLOAD_DIR=/var/data/movies`, and `MOVIE_STORAGE_PERSISTENT=true` in the service environment, then redeploy.
+- Confirm the admin Movie Manager reports persistent storage before uploading large files.
+- If you do not attach a persistent disk, leave `MOVIE_STORAGE_PERSISTENT` unset; the manager warns that uploads may be lost.
+- For higher-volume movie hosting, use object storage or a dedicated media service instead of the web service disk.
 - Do NOT deploy directly from `OneDrive/Bureau Portal` - copy to `C:\deploy\bureau-portal` to avoid OneDrive locking.

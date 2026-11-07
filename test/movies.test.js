@@ -1,5 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
 
 process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'test-admin@bureau.local';
@@ -11,6 +13,9 @@ const database = require('../database');
 let server;
 let baseUrl;
 const createdCodes = [];
+const createdMovieIds = [];
+const uploadedFiles = [];
+const adUnlockPhone = `070${String(Date.now()).slice(-7)}`;
 
 function request(path, options) {
   return fetch(`${baseUrl}${path}`, options);
@@ -22,6 +27,12 @@ function post(path, body, headers = {}) {
     headers: { 'Content-Type': 'application/json', ...headers },
     body: JSON.stringify(body)
   });
+}
+
+async function adminCookie() {
+  const response = await post('/api/auth/login', { email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD });
+  assert.equal(response.status, 200);
+  return response.headers.get('set-cookie').split(';')[0];
 }
 
 test.before(async () => {
@@ -40,6 +51,13 @@ test.after(async () => {
   for (const code of createdCodes) {
     cleanup.prepare('DELETE FROM vouchers WHERE code = ?').run(code);
   }
+  for (const movieId of createdMovieIds) {
+    cleanup.prepare('DELETE FROM movies WHERE id = ?').run(movieId);
+  }
+  for (const filename of uploadedFiles) {
+    fs.rmSync(path.join(__dirname, '..', 'public', 'assets', 'movies', filename), { force: true });
+  }
+  cleanup.prepare('DELETE FROM movie_entitlements WHERE phone = ?').run(`+256${adUnlockPhone.slice(1)}`);
   cleanup.close();
 });
 
@@ -69,6 +87,81 @@ test('player page gates premium titles behind the access API', async () => {
   assert.equal(response.status, 200);
   assert.match(html, /api\/movie-access/);
   assert.match(html, /access: 'premium'/);
+});
+
+test('movie upload streams media and movie creation requires valid attribution', async () => {
+  const cookie = await adminCookie();
+  const filename = `test-movie-${Date.now()}.mp4`;
+  const contents = Buffer.from('small test movie payload');
+  const upload = await request('/api/admin/movies/media?type=media', {
+    method: 'POST',
+    headers: {
+      Cookie: cookie,
+      'Content-Type': 'application/octet-stream',
+      'X-Movie-Filename': filename
+    },
+    body: contents
+  });
+  assert.equal(upload.status, 201);
+  const uploaded = await upload.json();
+  assert.equal(uploaded.size, contents.length);
+  uploadedFiles.push(uploaded.filename);
+
+  const servedFile = await request(uploaded.assetUrl);
+  assert.equal(servedFile.status, 200);
+  assert.deepEqual(Buffer.from(await servedFile.arrayBuffer()), contents);
+
+  const movie = {
+    id: `TEST-LICENSE-${Date.now()}`,
+    title: 'Test Licensed Movie',
+    year: 2008,
+    runtime: '10m',
+    description: 'A test movie for validating required license metadata.',
+    genres: 'Animation, Short',
+    mediaUrl: uploaded.assetUrl,
+    access: 'free',
+    status: 'draft'
+  };
+  const missingLicense = await post('/api/admin/movies', movie, { Cookie: cookie });
+  assert.equal(missingLicense.status, 400);
+
+  const created = await post('/api/admin/movies', {
+    ...movie,
+    licenseName: 'Creative Commons Attribution 3.0',
+    licenseUrl: 'https://creativecommons.org/licenses/by/3.0/',
+    attribution: 'Big Buck Bunny — Blender Foundation (www.blender.org).'
+  }, { Cookie: cookie });
+  assert.equal(created.status, 201);
+  const createdBody = await created.json();
+  createdMovieIds.push(createdBody.movie.id);
+  assert.deepEqual(createdBody.movie.license, {
+    name: 'Creative Commons Attribution 3.0',
+    url: 'https://creativecommons.org/licenses/by/3.0/',
+    attribution: 'Big Buck Bunny — Blender Foundation (www.blender.org).'
+  });
+});
+
+test('legacy movie publish route requires and persists license attribution', async () => {
+  const cookie = await adminCookie();
+  const missingLicense = await post('/api/movies/admin/publish', {
+    title: 'Legacy Publish Test',
+    category: 'Animation',
+    mediaUrl: '/assets/movies/test.mp4'
+  }, { Cookie: cookie });
+  assert.equal(missingLicense.status, 400);
+
+  const created = await post('/api/movies/admin/publish', {
+    title: 'Legacy Publish Test',
+    category: 'Animation',
+    mediaUrl: '/assets/movies/test.mp4',
+    licenseName: 'Creative Commons Attribution 3.0',
+    licenseUrl: 'https://creativecommons.org/licenses/by/3.0/',
+    attribution: 'Big Buck Bunny — Blender Foundation (www.blender.org).'
+  }, { Cookie: cookie });
+  assert.equal(created.status, 201);
+  const body = await created.json();
+  createdMovieIds.push(body.movie.id);
+  assert.equal(body.movie.license.name, 'Creative Commons Attribution 3.0');
 });
 
 test('subscription validates plan, gateway and identities before contacting a provider', async () => {
@@ -152,7 +245,7 @@ test('voucher redemption grants premium access exactly once', async () => {
 });
 
 test('ad-supported unlock grants temporary access and enforces the daily limit', async () => {
-  const first = await post('/api/movie-ad-unlock', { phone: '0700000097' });
+  const first = await post('/api/movie-ad-unlock', { phone: adUnlockPhone });
   assert.equal(first.status, 200);
   const body = await first.json();
   assert.equal(body.access, true);
@@ -162,9 +255,9 @@ test('ad-supported unlock grants temporary access and enforces the daily limit',
   const access = await request('/api/movie-access', { headers: { Cookie: setCookie.split(';')[0] } });
   assert.equal((await access.json()).access, true);
 
-  assert.equal((await post('/api/movie-ad-unlock', { phone: '0700000097' })).status, 200);
-  assert.equal((await post('/api/movie-ad-unlock', { phone: '0700000097' })).status, 200);
-  assert.equal((await post('/api/movie-ad-unlock', { phone: '0700000097' })).status, 429);
+  assert.equal((await post('/api/movie-ad-unlock', { phone: adUnlockPhone })).status, 200);
+  assert.equal((await post('/api/movie-ad-unlock', { phone: adUnlockPhone })).status, 200);
+  assert.equal((await post('/api/movie-ad-unlock', { phone: adUnlockPhone })).status, 429);
 });
 
 test('returning subscribers restore access with phone or email', async () => {

@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const { Transform } = require('stream');
+const { pipeline } = require('stream/promises');
 const axios = require('axios');
 const crypto = require('crypto');
 const dotenv = require('dotenv');
@@ -73,6 +75,23 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function cleanText(value, maxLength = 160) {
   return String(value || '').trim().slice(0, maxLength);
+}
+
+function normalizeMovieLicense(payload) {
+  const license = payload?.license || {};
+  const name = cleanText(payload?.licenseName || license.name, 160);
+  const url = cleanText(payload?.licenseUrl || license.url, 200);
+  const attribution = cleanText(payload?.attribution || license.attribution, 500);
+  if (!name || !url || !attribution) return null;
+
+  try {
+    const parsedUrl = new URL(url);
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) return null;
+  } catch {
+    return null;
+  }
+
+  return { name, url, attribution };
 }
 
 function isValidEmail(value) {
@@ -577,60 +596,102 @@ app.post('/api/admin/documents/link', requireAdmin, async (req, res) => {
   }
 });
 
-const MOVIE_UPLOAD_DIR = path.join(__dirname, 'public', 'assets', 'movies');
+const MOVIE_UPLOAD_DIR = path.resolve(process.env.MOVIE_UPLOAD_DIR || path.join(__dirname, 'public', 'assets', 'movies'));
+const MOVIE_UPLOAD_MAX_BYTES = 2 * 1024 * 1024 * 1024;
 fs.mkdirSync(MOVIE_UPLOAD_DIR, { recursive: true });
 
-app.post('/api/admin/movies/media', requireAdmin, express.raw({ type: 'application/octet-stream', limit: '2gb' }), (req, res) => {
+app.post('/api/admin/movies/media', requireAdmin, async (req, res) => {
+  const type = cleanText(req.query?.type, 40);
+  if (!['media', 'poster', 'subtitle'].includes(type)) {
+    req.resume();
+    return res.status(400).json({ success: false, message: 'Invalid media type. Use media, poster, or subtitle.' });
+  }
+
+  const filename = cleanText(req.headers['x-movie-filename'], 200);
+  if (!filename) {
+    req.resume();
+    return res.status(400).json({ success: false, message: 'X-Movie-Filename header is required.' });
+  }
+
+  const allowedExtensions = {
+    media: new Set(['.mp4', '.webm', '.ogv', '.mov', '.m4v', '.mkv']),
+    poster: new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif']),
+    subtitle: new Set(['.vtt', '.srt'])
+  };
+  const extension = path.extname(filename).toLowerCase();
+  if (!allowedExtensions[type].has(extension)) {
+    req.resume();
+    return res.status(400).json({ success: false, message: `That file type (${extension || 'unknown'}) is not supported for ${type}.` });
+  }
+
+  const contentLength = Number(req.headers['content-length'] || 0);
+  if (contentLength > MOVIE_UPLOAD_MAX_BYTES) {
+    req.resume();
+    return res.status(413).json({ success: false, message: 'Uploads must be smaller than 2 GB.' });
+  }
+
+  let safeName = path.basename(filename.replace(/[^a-zA-Z0-9._-]/g, '_').replace(/_+/g, '_'));
+  if (!safeName || safeName === '.' || safeName === '..') safeName = `movie-${Date.now()}${extension}`;
+  const base = path.basename(safeName, extension) || 'movie';
+  const temporaryPath = path.join(MOVIE_UPLOAD_DIR, `.upload-${uuidv4()}.tmp`);
+  let uploadedBytes = 0;
+  let oversized = false;
+
   try {
-    const type = cleanText(req.query?.type, 40);
-    if (!['media', 'poster', 'subtitle'].includes(type)) {
-      return res.status(400).json({ success: false, message: 'Invalid media type. Use media, poster, or subtitle.' });
+    await pipeline(
+      req,
+      new Transform({
+        transform(chunk, encoding, callback) {
+          uploadedBytes += chunk.length;
+          if (uploadedBytes > MOVIE_UPLOAD_MAX_BYTES) {
+            oversized = true;
+            callback();
+            return;
+          }
+          callback(null, chunk);
+        }
+      }),
+      fs.createWriteStream(temporaryPath, { flags: 'wx' })
+    );
+
+    if (oversized) {
+      await fs.promises.rm(temporaryPath, { force: true });
+      return res.status(413).json({ success: false, message: 'Uploads must be smaller than 2 GB.' });
     }
-    const filename = cleanText(req.headers['x-movie-filename'], 200);
-    if (!filename) return res.status(400).json({ success: false, message: 'X-Movie-Filename header is required.' });
-    if (!req.body || !req.body.length) {
+    if (!uploadedBytes) {
+      await fs.promises.rm(temporaryPath, { force: true });
       return res.status(400).json({ success: false, message: 'The uploaded file is empty. Choose a file with content and try again.' });
     }
 
-    const allowedExtensions = {
-      media: new Set(['.mp4', '.webm', '.ogv', '.mov', '.m4v', '.mkv']),
-      poster: new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif']),
-      subtitle: new Set(['.vtt', '.srt'])
-    };
-    const extension = path.extname(filename).toLowerCase();
-    if (!allowedExtensions[type].has(extension)) {
-      return res.status(400).json({ success: false, message: `That file type (${extension || 'unknown'}) is not supported for ${type}.` });
+    let targetName;
+    for (let counter = 0; counter < 1000; counter += 1) {
+      targetName = counter === 0 ? safeName : `${base}-${counter}${extension}`;
+      const targetPath = path.join(MOVIE_UPLOAD_DIR, targetName);
+      try {
+        await fs.promises.link(temporaryPath, targetPath);
+        break;
+      } catch (error) {
+        if (error.code !== 'EEXIST') throw error;
+        if (counter === 999) throw new Error('Could not allocate a unique movie filename.');
+      }
     }
 
-    let safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_').replace(/_+/g, '_');
-    if (!safeName || safeName === '.' || safeName === '..') safeName = `movie-${Date.now()}${extension}`;
-    // Prevent path traversal: keep only the final path segment.
-    safeName = path.basename(safeName);
-    let targetPath = path.join(MOVIE_UPLOAD_DIR, safeName);
-    if (!targetPath.startsWith(MOVIE_UPLOAD_DIR)) {
-      return res.status(400).json({ success: false, message: 'Invalid filename.' });
-    }
-    // Avoid overwriting an existing asset: append a counter when needed.
-    if (fs.existsSync(targetPath)) {
-      const base = path.basename(safeName, extension) || 'movie';
-      let counter = 1;
-      do {
-        safeName = `${base}-${counter}${extension}`;
-        targetPath = path.join(MOVIE_UPLOAD_DIR, safeName);
-        counter += 1;
-      } while (fs.existsSync(targetPath) && counter < 1000);
-    }
-    fs.writeFileSync(targetPath, req.body);
-
-    const assetUrl = `/assets/movies/${encodeURIComponent(safeName)}`;
-    logEvent('movie.media.uploaded', { type, filename: safeName, size: req.body.length });
-    return res.status(201).json({ success: true, assetUrl, filename: safeName, size: req.body.length });
+    await fs.promises.rm(temporaryPath, { force: true });
+    const assetUrl = `/assets/movies/${encodeURIComponent(targetName)}`;
+    logEvent('movie.media.uploaded', { type, filename: targetName, size: uploadedBytes });
+    return res.status(201).json({ success: true, assetUrl, filename: targetName, size: uploadedBytes });
   } catch (error) {
-    logEvent('movie.media.upload.failed', { message: error.message });
-    if (error && (error.code === 'ENOSPC' || /no space left|disk quota|ENOSPC/i.test(String(error.message || '')))) {
-      return res.status(507).json({ success: false, message: 'Upload folder is out of disk space. Free space in OneDrive / public/assets/movies or upload a smaller file.' });
+    try {
+      await fs.promises.rm(temporaryPath, { force: true });
+    } catch (cleanupError) {
+      logEvent('movie.media.upload.cleanup.failed', { message: cleanupError.message });
     }
-    return res.status(502).json({ success: false, message: 'Media upload failed.' });
+    logEvent('movie.media.upload.failed', { message: error.message });
+    if (error.code === 'ENOSPC' || /no space left|disk quota|ENOSPC/i.test(String(error.message || ''))) {
+      return res.status(507).json({ success: false, message: 'Movie storage is out of space. Free space on the configured storage volume or upload a smaller file.' });
+    }
+    if (res.destroyed || res.headersSent) return;
+    return res.status(502).json({ success: false, message: 'Media upload failed. Check the file size and Render logs, then try again.' });
   }
 });
 
@@ -659,11 +720,14 @@ app.get('/api/admin/movies/storage', requireAdmin, (req, res) => {
     }
     return res.status(200).json({
       success: true,
-      uploadDir: 'public/assets/movies',
+      uploadDir: process.env.MOVIE_UPLOAD_DIR ? 'configured movie storage' : 'public/assets/movies',
       fileCount,
       totalBytes,
       totalMb: Math.round((totalBytes / (1024 * 1024)) * 100) / 100,
-      warning: 'Uploads live inside OneDrive — keep 2x the video size free or move big files out of sync.'
+      persistent: process.env.MOVIE_STORAGE_PERSISTENT === 'true',
+      warning: process.env.MOVIE_STORAGE_PERSISTENT === 'true'
+        ? ''
+        : 'Render local storage is temporary. Attach a persistent disk and set MOVIE_UPLOAD_DIR before relying on uploaded media.'
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Could not read upload storage.' });
@@ -673,7 +737,6 @@ app.get('/api/admin/movies/storage', requireAdmin, (req, res) => {
 app.post('/api/admin/movies', requireAdmin, (req, res) => {
   try {
     const payload = req.body || {};
-    const license = payload.license || {};
     const normalized = {
       id: payload.id || `MOV-${uuidv4()}`,
       title: cleanText(payload.title, 120),
@@ -682,13 +745,14 @@ app.post('/api/admin/movies', requireAdmin, (req, res) => {
       description: cleanText(payload.description, 1000),
       genres: Array.isArray(payload.genres) ? payload.genres.join(', ') : String(payload.genres || ''),
       mediaUrl: cleanText(payload.mediaUrl, 500),
-      licenseName: cleanText(payload.licenseName || license.name, 160) || 'Bureau Portal Original',
-      licenseUrl: cleanText(payload.licenseUrl || license.url, 200) || 'https://bureau.local/license',
-      attribution: cleanText(payload.attribution || license.attribution, 500) || `${cleanText(payload.title, 120) || 'Bureau Portal'} — licensed for Bureau Movies streaming.`
+      license: normalizeMovieLicense(payload)
     };
     const required = ['title', 'runtime', 'description', 'genres', 'mediaUrl'];
     for (const field of required) {
       if (!normalized[field]) return res.status(400).json({ success: false, message: `${field} is required.` });
+    }
+    if (!normalized.license) {
+      return res.status(400).json({ success: false, message: 'License name, an HTTP(S) license URL, and attribution are required.' });
     }
     if (!Number.isInteger(normalized.year) || normalized.year < 1888 || normalized.year > new Date().getFullYear() + 5) {
       return res.status(400).json({ success: false, message: 'Enter a valid release year.' });
@@ -707,11 +771,7 @@ app.post('/api/admin/movies', requireAdmin, (req, res) => {
       mediaUrl: normalized.mediaUrl,
       posterUrl: cleanText(payload.posterUrl, 500) || null,
       subtitlesUrl: payload.subtitlesUrl || null,
-      license: {
-        name: cleanText(normalized.licenseName, 160),
-        url: cleanText(normalized.licenseUrl, 200),
-        attribution: cleanText(normalized.attribution, 500)
-      },
+      license: normalized.license,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
@@ -845,6 +905,7 @@ app.get('/movies-admin.html', requireAdminPage, (req, res, next) => {
   });
 });
 
+app.use('/assets/movies', express.static(MOVIE_UPLOAD_DIR));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res, next) => {
@@ -1618,6 +1679,10 @@ app.post('/api/movies/admin/publish', requireAdmin, (req, res) => {
     const title = cleanText(req.body?.title || req.body?.movieTitle, 120);
     const category = cleanText(req.body?.category || req.body?.movieCategory, 120);
     if (!title || !category) return res.status(400).json({ success: false, message: 'Movie title and category are required.' });
+    const license = normalizeMovieLicense(req.body);
+    if (!license) return res.status(400).json({ success: false, message: 'License name, an HTTP(S) license URL, and attribution are required.' });
+    const mediaUrl = cleanText(req.body?.mediaUrl, 500);
+    if (!mediaUrl) return res.status(400).json({ success: false, message: 'Media URL is required.' });
     const now = new Date().toISOString();
     const movie = database.createMovie({
       id: `MOV-${uuidv4()}`,
@@ -1630,10 +1695,10 @@ app.post('/api/movies/admin/publish', requireAdmin, (req, res) => {
       status: 'published',
       featured: false,
       subtitlesLanguage: 'en',
-      mediaUrl: cleanText(req.body?.mediaUrl, 500) || null,
+      mediaUrl,
       posterUrl: cleanText(req.body?.posterUrl, 500) || null,
       subtitlesUrl: null,
-      license: { name: 'Bureau Portal Original', url: 'https://bureau.local/license', attribution: '' },
+      license,
       createdAt: now,
       updatedAt: now
     });

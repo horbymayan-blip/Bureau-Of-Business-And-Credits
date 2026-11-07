@@ -261,7 +261,7 @@
 
     <div class="overview-grid">
       <section class="overview-panel"><h2>Jobs</h2><table><thead><tr><th>Title</th><th>District</th><th>Status</th></tr></thead><tbody id="jobsBody"></tbody></table></section>
-      <section class="overview-panel" style="border:2px solid #e50914;"><h2>🎬 BureauMovies — Quick Add</h2><p style="margin:0 0 8px;color:var(--muted);font-size:.9rem;">Publish in seconds. Featured + Premium = 10s billboard teaser.</p><div class="controls" style="margin-bottom:8px;"><input id="qTitle" placeholder="Title e.g. Kampala Nights" style="flex:2;min-width:180px;"><input id="qGenres" placeholder="Category e.g. Trending Now" style="flex:1;min-width:140px;"></div><div class="controls" style="margin-bottom:8px;"><input id="qMedia" placeholder="Media URL /assets/movies/...mp4" style="flex:2;min-width:180px;"><select id="qAccess"><option value="premium">Premium</option><option value="free">Free</option></select><select id="qFeatured"><option value="yes">Featured Yes</option><option value="no">Featured No</option></select></div><div class="controls"><input id="qPoster" placeholder="Poster URL /assets/movies/...jpg (optional — auto fallback art if empty)" style="flex:2;min-width:180px;"><button type="button" id="qPublish">Publish Movie</button><a href="/movies-admin.html" style="align-self:center;font-weight:700;">Open full Movie Manager →</a><a href="/movies" style="align-self:center;font-weight:700;">View site →</a></div><div id="qMsg" role="status" style="font-size:.9rem;color:var(--muted);"></div><table style="margin-top:10px;"><thead><tr><th>Recent</th><th>Access</th><th>Status</th></tr></thead><tbody id="moviesBody"></tbody></table></section>
+      <section class="overview-panel" style="border:2px solid #e50914;"><h2>🎬 BureauMovies — Quick Add</h2><p style="margin:0 0 8px;color:var(--muted);font-size:.9rem;">Publish in seconds. Featured + Premium = 10s billboard teaser.</p><div class="controls" style="margin-bottom:8px;"><input id="qTitle" placeholder="Title e.g. Kampala Nights" style="flex:2;min-width:180px;"><input id="qGenres" placeholder="Category e.g. Trending Now" style="flex:1;min-width:140px;"></div><div class="controls" style="margin-bottom:8px;"><input id="qMedia" placeholder="Media URL /assets/movies/...mp4" style="flex:2;min-width:180px;"><select id="qAccess"><option value="premium">Premium</option><option value="free">Free</option></select><select id="qFeatured"><option value="yes">Featured Yes</option><option value="no">Featured No</option></select></div><div class="controls"><input id="qPoster" placeholder="Poster URL /assets/movies/...jpg (optional ? auto fallback art if empty)" style="flex:2;min-width:180px;"></div><div class="controls"><input id="qLicenseName" placeholder="License name" required style="flex:1;min-width:180px;"><input id="qLicenseUrl" placeholder="License URL (HTTP/S)" required style="flex:1;min-width:180px;"></div><div class="controls"><input id="qAttribution" placeholder="Required attribution" required style="flex:1;min-width:240px;"><button type="button" id="qPublish">Publish Movie</button><a href="/movies-admin.html" style="align-self:center;font-weight:700;">Open full Movie Manager ?</a><a href="/movies" style="align-self:center;font-weight:700;">View site ?</a></div><div id="qMsg" role="status" style="font-size:.9rem;color:var(--muted);"></div><table style="margin-top:10px;"><thead><tr><th>Recent</th><th>Access</th><th>Status</th></tr></thead><tbody id="moviesBody"></tbody></table></section>
       <section class="overview-panel"><h2>Applications</h2><table><thead><tr><th>Job</th><th>Candidate</th><th>Status</th></tr></thead><tbody id="applicationsBody"></tbody></table></section>
       <section class="overview-panel"><h2>Matches</h2><table><thead><tr><th>Job</th><th>Candidate</th><th>Score</th></tr></thead><tbody id="matchesBody"></tbody></table></section>
       <section class="overview-panel"><h2>Wi-Fi Entitlements</h2><table><thead><tr><th>Package</th><th>Phone</th><th>Status</th></tr></thead><tbody id="entitlementsBody"></tbody></table></section>
@@ -433,11 +433,47 @@
       const mediaUrl = document.getElementById('qMedia').value.trim();
       const posterInput = document.getElementById('qPoster');
       const posterUrl = posterInput ? posterInput.value.trim() : '';
+      const licenseName = document.getElementById('qLicenseName').value.trim();
+      const licenseUrl = document.getElementById('qLicenseUrl').value.trim();
+      const attribution = document.getElementById('qAttribution').value.trim();
       const msg = document.getElementById('qMsg');
       if (!title || !mediaUrl) { msg.textContent = 'Title + Media URL required. Upload file in Movie Manager first.'; return; }
-      const r = await fetch('/api/admin/movies', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, year: new Date().getFullYear(), runtime: '2h 00m', description: title + ' — ' + (document.getElementById('qGenres').value || 'General'), genres: document.getElementById('qGenres').value || 'Trending Now', access: document.getElementById('qAccess').value, status: 'published', featured: document.getElementById('qFeatured').value, mediaUrl, posterUrl: posterUrl || null }) });
-      const j = await r.json(); msg.textContent = j.movie ? ('Published: ' + j.movie.title) : (j.message || 'Failed');
-      if (r.ok) { document.getElementById('qTitle').value = ''; document.getElementById('qMedia').value = ''; if (posterInput) posterInput.value = ''; loadMovieStats(); }
+      if (!licenseName || !licenseUrl || !attribution) { msg.textContent = 'License name, license URL, and attribution are required. Use the full Movie Manager for complete details.'; return; }
+      try {
+        const response = await fetch('/api/admin/movies', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            year: new Date().getFullYear(),
+            runtime: '2h 00m',
+            description: title + ' — ' + (document.getElementById('qGenres').value || 'General'),
+            genres: document.getElementById('qGenres').value || 'Trending Now',
+            access: document.getElementById('qAccess').value,
+            status: 'published',
+            featured: document.getElementById('qFeatured').value,
+            mediaUrl,
+            posterUrl: posterUrl || null,
+            licenseName,
+            licenseUrl,
+            attribution
+          })
+        });
+        const result = await response.json();
+        msg.textContent = response.ok ? `Published: ${result.movie.title}` : (result.message || 'Movie could not be published.');
+        if (response.ok) {
+          document.getElementById('qTitle').value = '';
+          document.getElementById('qMedia').value = '';
+          document.getElementById('qLicenseName').value = '';
+          document.getElementById('qLicenseUrl').value = '';
+          document.getElementById('qAttribution').value = '';
+          if (posterInput) posterInput.value = '';
+          loadMovieStats();
+        }
+      } catch (error) {
+        console.error('Movie quick add failed:', error);
+        msg.textContent = 'Could not connect to the movie server. Check your connection and try again.';
+      }
     });
 
     document.getElementById('logoutButton').addEventListener('click', async () => {

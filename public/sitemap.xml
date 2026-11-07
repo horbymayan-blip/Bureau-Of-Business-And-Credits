@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-    <url>
-        <loc>https://bureau-of-business-and-credits.onrender.com/</loc>
-    </url>
-
-    <url>
-        <loc>https://bureau-of-business-and-credits.onrender.com/wifi.html</loc>
-    </url>
-
-    <url>
-        <loc>https://bureau-of-business-and-credits.onrender.com/bitds.html</loc>
-    </url>
-
-    <url>
-        <loc>https://bureau-of-business-and-credits.onrender.com/jobs.html</loc>
-    </url>
-
-    <url>
-        <loc>https://bureau-of-business-and-credits.onrender.com/credit.html</loc>
-    </url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/wifi.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/job-seeker.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/employer.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/jobs.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/loan-apply.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/credit.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/bitds.html</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/movies</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/premium</loc></url>
+    <url><loc>https://bureau-of-business-and-credits.onrender.com/privacy.html</loc></url>
 
 </urlset>
